@@ -14,9 +14,11 @@ def index():
     elif request.method == 'POST':
         user_name = str(request.form['name'])
         user_address = str(request.form['address'])
-        #cur = db.cursor()
-        #cur.execute('''INSERT INTO CUSTOMER VALUES(%s,%s)''', (user_name, user_address))
-        #db.commit()
+        cur = db.cursor()
+        query = "INSERT INTO CUSTOMER(cname, address) VALUES(user_name,user_address)"
+        print query
+        cur.execute(query)
+        db.commit()
         print user_name, user_address
         if request.form['submit'] == 'Submit':
             return redirect(url_for('subscription'))
@@ -33,6 +35,10 @@ def add_magazine():
         magazine_name = str(request.form['magazine_name'])
         magazine_frequency = str(request.form['magazine_frequency'])
         magazine_editor_name = str(request.form['magazine_editor'])
+        cur = db.cursor()
+        query = "INSERT INTO MAGAZINE VALUES (%s,%s,%s)"%(magazine_name,magazine_frequency,magazine_editor_name)
+        cur.execute(query)
+        db.commit()
         print magazine_name, magazine_frequency, magazine_editor_name
         if request.form['submit'] == 'Submit':
             return redirect(url_for('index'))
