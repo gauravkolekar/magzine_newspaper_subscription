@@ -22,3 +22,18 @@ def index():
 def add_magazine():
     if request.method == 'GET':
         return render_template('add_magazine.html')
+
+@app.route('/magazines', methods=['GET', 'POST'])
+def magazines():
+    if request.method == 'GET':
+        return render_template('magazines.html')
+
+@app.route('/daily_newspapers', methods=['GET', 'POST'])
+def daily_newspapers():
+    if request.method == 'GET':
+        return render_template('daily_newspapers.html')
+
+@app.route('/weekly_newspapers', methods=['GET', 'POST'])
+def weekly_newspapers():
+    if request.method == 'GET':
+        return render_template('weekly_newspapers.html')
