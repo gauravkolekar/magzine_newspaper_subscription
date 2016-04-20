@@ -13,7 +13,7 @@ DROP TABLE customer;
 
 
 CREATE TABLE customer (
-    id_no INT,
+    id_no INT AUTO_INCREMENT,
     cname VARCHAR(20),
     address VARCHAR(40),
     PRIMARY KEY (id_no)
@@ -29,8 +29,9 @@ CREATE TABLE magazine (
 CREATE TABLE sub_magazine (
     id_no INT,
     pm_name VARCHAR(20),
+    no_of_issues INT,
     start_date DATE,
-    end_date DATE,
+    end_date DATE NOT NULL,   
     actual_end_date DATE,
     active_flag BOOLEAN,
     cost DECIMAL(10,5),
@@ -42,14 +43,12 @@ CREATE TABLE sub_magazine (
 );
 
 CREATE TABLE magazine_subscription_rate (
-    id_no INT,
     pm_name VARCHAR(20),
+    state VARCHAR(20),
     rate DECIMAL(10 , 5 ),
-    PRIMARY KEY (id_no,pm_name),
-    FOREIGN KEY (id_no)
-        REFERENCES sub_magazine (id_no),
+    PRIMARY KEY (pm_name, state),
     FOREIGN KEY (pm_name)
-        REFERENCES sub_magazine (pm_name)
+        REFERENCES magazine (pm_name)
 );
 
 CREATE TABLE newspaper_daily(
