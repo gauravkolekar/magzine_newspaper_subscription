@@ -1,12 +1,13 @@
-import MySQLdb
+from flask import render_template
 from runserver import app
-from flask import g
 from database_configuration import database_configuration as db
-from database_configuration import cursor as cur
+#from database_configuration import cursor as cur
 
 @app.route('/')
+@app.route('/index')
 def index():
+    cur = db.cursor()
     cur.execute("SELECT VERSION()")
-    data = cur.fetchone()
+    data = str(cur.fetchone())
     db.close()
-    return 'Hello World! This website uses mysql: '+str(data)
+    return render_template('index.html', sqlversion=data)
