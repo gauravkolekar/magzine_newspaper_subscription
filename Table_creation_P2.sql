@@ -1,4 +1,4 @@
-use db1;
+use subscriptiondb;
 
 DROP TABLE magazine_subscription_rate;
 DROP TABLE daily_newspaper_rate;
@@ -10,14 +10,6 @@ DROP TABLE newspaper_daily;
 DROP TABLE newspaper_weekly;
 DROP TABLE magazine;
 DROP TABLE customer;
-
-
-CREATE TABLE customer (
-    id_no INT AUTO_INCREMENT,
-    cname VARCHAR(20),
-    address VARCHAR(40),
-    PRIMARY KEY (id_no)
-);
 
 CREATE TABLE magazine (
     pm_name VARCHAR(20),
