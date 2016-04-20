@@ -5,7 +5,7 @@ import MySQLdb
 
 @app.before_request
 def db_connect():
-    g.conn = MySQLdb.connect(host="127.0.0.1", port=3306, user="root", passwd="password", db="subscriptiondb")
+    g.conn = MySQLdb.connect(host="127.0.0.1", port=3306, user="root", passwd="nju89ikM", db="db1")
     g.cursor = g.conn.cursor()
 
 @app.after_request
