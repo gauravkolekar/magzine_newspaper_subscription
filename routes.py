@@ -1,19 +1,12 @@
+import MySQLdb
 from runserver import app
+from flask import g
 from database_configuration import database_configuration as db
-#using the database configuration to execute SQL statements
-
-cur = db.cursor()
-# creating a cursor object to execute queries on the database
-
-cur.execute("SELECT VERSION()")
-# query to find out the database version
-
-data = cur.fetchone()
-# Fetch a single row using fetchone() method.
-
-db.close()
-#disconnect from database
+from database_configuration import cursor as cur
 
 @app.route('/')
 def index():
+    cur.execute("SELECT VERSION()")
+    data = cur.fetchone()
+    db.close()
     return 'Hello World! This website uses mysql: '+str(data)
