@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect
 from runserver import app
-#from database_configuration import database_configuration as db
-from db_config import database_configuration as db
+from database_configuration import database_configuration as db
+#from db_config import database_configuration as db
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -74,3 +74,8 @@ def daily_newspapers():
 def weekly_newspapers():
     if request.method == 'GET':
         return render_template('weekly_newspapers.html')
+
+@app.route('/magazine_subscription', methods=['GET', 'POST'])
+def magazine_subscription():
+    if request.method == 'GET':
+        return render_template('magazine_subscription.html')
