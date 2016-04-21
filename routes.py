@@ -1,6 +1,7 @@
 from flask import render_template, request, url_for, redirect
 from runserver import app
 from database_configuration import database_configuration as db
+#from db_config import database_configuration as db
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -14,12 +15,12 @@ def index():
     elif request.method == 'POST':
         user_name = str(request.form['name'])
         user_address = str(request.form['address'])
-        #cur = db.cursor()
-        #query = "INSERT INTO CUSTOMER(cname, address) VALUES(user_name,user_address)"
-        #print query
-        #cur.execute(query)
-        #db.commit()
-        print user_name, user_address
+        cur = db.cursor()
+        add_customer = "INSERT INTO CUSTOMER (cname, address) VALUES (%s, %s)"
+        data_customer = (user_name, user_address)
+        cur.execute(add_customer, data_customer)
+        db.commit()
+        #print user_name, user_address
         if request.form['submit'] == 'Submit':
             return redirect(url_for('subscription'))
 
@@ -35,11 +36,12 @@ def add_magazine():
         magazine_name = str(request.form['magazine_name'])
         magazine_frequency = str(request.form['magazine_frequency'])
         magazine_editor_name = str(request.form['magazine_editor'])
-        #cur = db.cursor()
-        #query = "INSERT INTO MAGAZINE VALUES (%s,%s,%s)"%(magazine_name,magazine_frequency,magazine_editor_name)
-        #cur.execute(query)
-        #db.commit()
-        print magazine_name, magazine_frequency, magazine_editor_name
+        cur = db.cursor()
+        query = "INSERT INTO MAGAZINE VALUES (%s,%s,%s)"
+        query_data = (magazine_name,magazine_frequency,magazine_editor_name)
+        cur.execute(query, query_data)
+        db.commit()
+        #print magazine_name, magazine_frequency, magazine_editor_name
         if request.form['submit'] == 'Submit':
             return redirect(url_for('index'))
 
