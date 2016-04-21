@@ -40,7 +40,7 @@ def add_magazine():
         rate = int(request.form['rate'])
         cur = db.cursor()
         try:
-            add_magazine1 = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
+            add_magazine = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
             data_magazine = (magazine_name,magazine_frequency,magazine_editor_name)
             cur.execute(add_magazine,data_magazine)
         except:
