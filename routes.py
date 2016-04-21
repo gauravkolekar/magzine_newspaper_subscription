@@ -18,8 +18,7 @@ def index():
         cur = db.cursor()
         add_customer = "INSERT INTO CUSTOMER (cname, address) VALUES (%s, %s)"
         data_customer = (user_name, user_address)
-        cur.execute(add_customer,data_customer)
-#        cur.callproc('spCreateUser',(user_name,user_address))
+        cur.execute(add_customer, data_customer)
         db.commit()
         #print user_name, user_address
         if request.form['submit'] == 'Submit':
@@ -37,20 +36,11 @@ def add_magazine():
         magazine_name = str(request.form['magazine_name'])
         magazine_frequency = str(request.form['magazine_frequency'])
         magazine_editor_name = str(request.form['magazine_editor'])
-        state_name = str(request.form['state_name'])
-        rate = int(request.form['rate'])
-        cur = db.cursor()
-        try:
-            add_magazine1 = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
-            data_magazine = (magazine_name,magazine_frequency,magazine_editor_name)
-            cur.execute(add_magazine,data_magazine)
-        except:
-               pass
-        add_magazine_sub_rate = "INSERT INTO magazine_subscription_rate (pm_name, state, rate) VALUES (%s,%s,%s)"
-        data_magazine_sub_rate = (magazine_name,state_name,rate)
-        cur.execute(add_magazine_sub_rate,data_magazine_sub_rate)
-        db.commit()
-        print magazine_name, magazine_frequency, magazine_editor_name
+        add_magazine = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
+        data_magazine = (magazine_name,magazine_frequency,magazine_editor_name)
+        cur.execute(add_magazine,data_magazine)
+		db.commit()
+        #print magazine_name, magazine_frequency, magazine_editor_name
         if request.form['submit'] == 'Submit':
             return redirect(url_for('index'))
 
@@ -59,9 +49,12 @@ def add_magazine():
 def magazines():
     if request.method == 'GET':
         cur = db.cursor()
-        cur.execute("SELECT * FROM MAGAZINE;")
-        data = str(cur.fetchall())
-        return render_template('magazines.html', all_data=data)
+        cur.execute("SELECT m1.pm_name, m1.frequency, m2.state, m2.rate FROM magazine m1,magazine_subscription_rate m2 WHERE m1.pm_name = m2.pm_name;")
+        data = list(cur.fetchall())
+        all_magazines = list()
+        for row in data:
+            all_magazines.append(list(row))
+        return render_template('magazines.html', all_magazines=all_magazines)
 
 @app.route('/daily_newspapers', methods=['GET', 'POST'])
 def daily_newspapers():
