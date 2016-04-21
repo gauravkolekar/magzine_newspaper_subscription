@@ -5,7 +5,11 @@
     <title>Magazines</title>
 </head>
 <body>
-    Hello
-    <p>{{all_data}}</p>
+    <p>Welcome! Please feel free to subscribe</p>
+    <ol>
+        {%for magazine in all_magazines%}
+        <li>{{magazine}}<a>Subscribe</a></li>
+        {%endfor%}
+    </ol>
 </body>
 </html>
