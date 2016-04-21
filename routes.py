@@ -36,11 +36,20 @@ def add_magazine():
         magazine_name = str(request.form['magazine_name'])
         magazine_frequency = str(request.form['magazine_frequency'])
         magazine_editor_name = str(request.form['magazine_editor'])
-        add_magazine = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
-        data_magazine = (magazine_name,magazine_frequency,magazine_editor_name)
-        cur.execute(add_magazine,data_magazine)
-		db.commit()
-        #print magazine_name, magazine_frequency, magazine_editor_name
+        state_name = str(request.form['state_name'])
+        rate = int(request.form['rate'])
+        cur = db.cursor()
+        try:
+            add_magazine1 = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
+            data_magazine = (magazine_name,magazine_frequency,magazine_editor_name)
+            cur.execute(add_magazine,data_magazine)
+        except:
+               pass
+        add_magazine_sub_rate = "INSERT INTO magazine_subscription_rate (pm_name, state, rate) VALUES (%s,%s,%s)"
+        data_magazine_sub_rate = (magazine_name,state_name,rate)
+        cur.execute(add_magazine_sub_rate,data_magazine_sub_rate)
+        db.commit()
+        print magazine_name, magazine_frequency, magazine_editor_name
         if request.form['submit'] == 'Submit':
             return redirect(url_for('index'))
 
