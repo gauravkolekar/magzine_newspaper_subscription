@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect
 from runserver import app
-from database_configuration import database_configuration as db
-#from db_config import database_configuration as db
+#from database_configuration import database_configuration as db
+from db_config import database_configuration as db
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -36,16 +36,23 @@ def add_magazine():
         magazine_name = str(request.form['magazine_name'])
         magazine_frequency = str(request.form['magazine_frequency'])
         magazine_editor_name = str(request.form['magazine_editor'])
-        magazine_state = str(request.form['magazine_state'])
-        magazine_rate = str(request.form['magazine_rate'])
+        state_name = str(request.form['state_name'])
+        rate = int(request.form['rate'])
         cur = db.cursor()
-        query = "INSERT INTO MAGAZINE VALUES (%s,%s,%s)"
-        query_data = (magazine_name,magazine_frequency,magazine_editor_name)
-        cur.execute(query, query_data)
+        try:
+            add_magazine1 = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
+            data_magazine = (magazine_name,magazine_frequency,magazine_editor_name)
+            cur.execute(add_magazine,data_magazine)
+        except:
+               pass
+        add_magazine_sub_rate = "INSERT INTO magazine_subscription_rate (pm_name, state, rate) VALUES (%s,%s,%s)"
+        data_magazine_sub_rate = (magazine_name,state_name,rate)
+        cur.execute(add_magazine_sub_rate,data_magazine_sub_rate)
         db.commit()
-        #print magazine_name, magazine_frequency, magazine_editor_name
+        print magazine_name, magazine_frequency, magazine_editor_name
         if request.form['submit'] == 'Submit':
             return redirect(url_for('index'))
+
 
 @app.route('/magazines', methods=['GET', 'POST'])
 def magazines():
