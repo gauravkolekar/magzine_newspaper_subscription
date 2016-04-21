@@ -75,7 +75,12 @@ def weekly_newspapers():
     if request.method == 'GET':
         return render_template('weekly_newspapers.html')
 
-@app.route('/magazine_subscription', methods=['GET', 'POST'])
+@app.route('/magazine_subscription', methods=['GET'])
 def magazine_subscription():
+    name = request.args.get('name')
+    frequency = request.args.get('freq')
+    state = request.args.get('state')
+    rate = request.args.get('rate')
     if request.method == 'GET':
-        return render_template('magazine_subscription.html')
+        print name
+        return render_template('magazine_subscription.html', mag_name=name, mag_frequency=frequency, mag_state=state, mag_rate=rate)

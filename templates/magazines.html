@@ -6,10 +6,27 @@
 </head>
 <body>
     <p>Welcome! Please feel free to subscribe</p>
-    <ol>
+    <table style="width: 100%">
+        <tr>
+            <th>Magazine Name</th>
+            <th>Magazine Frequency</th>
+            <th>Magazine distribution state</th>
+            <th>Magazine Rate</th>
+            <th>Subscription Link</th>
+        </tr>
         {%for magazine in all_magazines%}
-        <li>{{magazine[0]}}{{magazine[1]}}${{magazine[3]|float }}<a href="{{url_for('magazine_subscription')}}" name="subscribe">Subscribe</a></li>
+        <tr>
+            <td>{{magazine[0]}}</td>
+            <td>{{magazine[1]}}</td>
+            <td>{{magazine[2]}}</td>
+            <td>${{magazine[3]|float }}</td>
+            <td>
+                <a href="{{url_for('magazine_subscription',name=magazine[0],freq=magazine[1],state=magazine[2],rate=magazine[3])}}">
+                    Subscribe
+                </a>
+            </td>
+        </tr>
         {%endfor%}
-    </ol>
+    </table>
 </body>
 </html>
