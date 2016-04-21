@@ -36,6 +36,8 @@ def add_magazine():
         magazine_name = str(request.form['magazine_name'])
         magazine_frequency = str(request.form['magazine_frequency'])
         magazine_editor_name = str(request.form['magazine_editor'])
+        magazine_state = str(request.form['magazine_state'])
+        magazine_rate = str(request.form['magazine_rate'])
         cur = db.cursor()
         query = "INSERT INTO MAGAZINE VALUES (%s,%s,%s)"
         query_data = (magazine_name,magazine_frequency,magazine_editor_name)
