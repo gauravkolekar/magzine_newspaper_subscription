@@ -8,7 +8,7 @@
     <p>Welcome! Please feel free to subscribe</p>
     <ol>
         {%for magazine in all_magazines%}
-        <li>{{magazine}}<a>Subscribe</a></li>
+        <li>{{magazine[0]}}{{magazine[1]}}${{magazine[3]|float }}<a href="{{url_for('magazine_subscription')}}" name="subscribe">Subscribe</a></li>
         {%endfor%}
     </ol>
 </body>
