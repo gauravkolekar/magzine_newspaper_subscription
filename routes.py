@@ -1,6 +1,7 @@
 from flask import render_template, request, url_for, redirect
 from runserver import app
 from database_configuration import database_configuration as db
+#from db_config import database_configuration as db
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -15,11 +16,12 @@ def index():
         user_name = str(request.form['name'])
         user_address = str(request.form['address'])
         cur = db.cursor()
-        query = "INSERT INTO CUSTOMER(cname, address) VALUES(user_name,user_address)"
-        print query
-        cur.execute(query)
+        add_customer = "INSERT INTO CUSTOMER (cname, address) VALUES (%s, %s)"
+        data_customer = (user_name, user_address)
+        cur.execute(add_customer,data_customer)
+#        cur.callproc('spCreateUser',(user_name,user_address))
         db.commit()
-        print user_name, user_address
+        #print user_name, user_address
         if request.form['submit'] == 'Submit':
             return redirect(url_for('subscription'))
 
