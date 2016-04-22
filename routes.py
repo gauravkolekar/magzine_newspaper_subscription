@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect, session
 from runserver import app
-from database_configuration import database_configuration as db
-#from db_config import database_configuration as db
+#from database_configuration import database_configuration as db
+from db_config import database_configuration as db
 from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
@@ -109,17 +109,18 @@ def weekly_newspapers():
 
 @app.route('/magazine_subscription', methods=['GET','POST'])
 def magazine_subscription():
+    cost = 0
     name = request.args.get('name')
-    frequency = request.args.get('freq', 10, type=int)
+    frequency = request.args.get('freq')
     state = request.args.get('state')
-    rate = request.args.get('rate', 10, type=float)
-    print type(frequency), frequency, type(rate), rate
+    rate = request.args.get('rate')
+    print "Initial values: ",type(frequency), frequency, type(rate), rate
     if request.method == 'GET':
         return render_template('magazine_subscription.html', mag_name=name, mag_frequency=frequency, mag_state=state, mag_rate=rate)
     elif request.method == 'POST':
         cur = db.cursor()
         my_var = session.get('sub_username', None)
-        cur.execute("SELECT id_no FROM customer WHERE cname = %s", (my_var))
+        cur.execute("SELECT id_no FROM customer WHERE cname = %s", [my_var])
         cust_id_tup = cur.fetchone()
         cust_id_list = list(cust_id_tup)
         cust_id = int(cust_id_list[0])
@@ -128,7 +129,9 @@ def magazine_subscription():
         magazine_end_date = request.form['end_date_magazine']
         magazine_start_date = datetime.strptime(magazine_start_date, '%Y-%m-%d')
         magazine_end_date = datetime.strptime(magazine_end_date, '%Y-%m-%d')
-        print type(frequency), frequency
+        frequency = str(frequency)
+        rate = float(rate)
+        print "frequency is: ",frequency,"and rate is:", rate
         act_freq = (magazine_end_date - magazine_start_date).days
         if frequency == 'Weekly':
             cost = (act_freq/7) * rate * magazine_number_of_issues
@@ -136,10 +139,10 @@ def magazine_subscription():
             cost = (act_freq/30) * rate * magazine_number_of_issues	
         elif frequency == 'Yearly':
             cost = (act_freq/365) * rate * magazine_number_of_issues	
-        print cust_id, magazine_number_of_issues, magazine_start_date, magazine_end_date
-        print type(act_freq)
+        print "List of values: ",cust_id, magazine_number_of_issues, magazine_start_date, magazine_end_date
+        print "Actual cost: ",cost
         add_customer_sub = "INSERT INTO sub_magazine (id_no, pm_name, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s)"
         data_customer_sub = (cust_id, name, magazine_number_of_issues, magazine_start_date, magazine_end_date, magazine_end_date, 1, cost)
         cur.execute(add_customer_sub, data_customer_sub)
         db.commit()
-        return 'Data has been saved'
+        return redirect(url_for('subscription'))
