@@ -52,6 +52,7 @@ def add_magazine():
         print magazine_name, magazine_frequency, magazine_editor_name
         if request.form['submit'] == 'Submit':
             return redirect(url_for('index'))
+        
 
 
 @app.route('/magazines', methods=['GET', 'POST'])
@@ -85,7 +86,7 @@ def magazine_subscription():
         #print name
         return render_template('magazine_subscription.html', mag_name=name, mag_frequency=frequency, mag_state=state, mag_rate=rate)
     elif request.method == 'POST':
-        magazine_number_of_issues = int(request.form['number_of_issues_magazine'])
+        magazine_number_of_issues = str(request.form['number_of_issues_magazine'])
         magazine_start_date = request.form['start_date_magazine']
         magazine_end_date = request.form['end_date_magazine']
         print magazine_number_of_issues, magazine_start_date, magazine_end_date
