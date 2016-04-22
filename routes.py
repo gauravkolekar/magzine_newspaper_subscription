@@ -1,7 +1,8 @@
-from flask import render_template, request, url_for, redirect
+from flask import render_template, request, url_for, redirect, session
 from runserver import app
 from database_configuration import database_configuration as db
 #from db_config import database_configuration as db
+from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -16,6 +17,7 @@ def index():
         user_name = str(request.form['name'])
         user_address = str(request.form['address'])
         cur = db.cursor()
+        session['my_var'] = user_name
         add_customer = "INSERT INTO CUSTOMER (cname, address) VALUES (%s, %s)"
         data_customer = (user_name, user_address)
         cur.execute(add_customer, data_customer)
@@ -80,14 +82,35 @@ def weekly_newspapers():
 def magazine_subscription():
     name = request.args.get('name')
     frequency = request.args.get('freq')
+    print type(frequency), frequency
     state = request.args.get('state')
     rate = request.args.get('rate')
     if request.method == 'GET':
-        #print name
+        print type(frequency), frequency
         return render_template('magazine_subscription.html', mag_name=name, mag_frequency=frequency, mag_state=state, mag_rate=rate)
     elif request.method == 'POST':
-        magazine_number_of_issues = str(request.form['number_of_issues_magazine'])
+        cur = db.cursor()
+        my_var = session.get('my_var', None)
+        cur.execute("SELECT id_no FROM customer WHERE cname = %s", (my_var,))
+        cust_id_tup = cur.fetchone()
+        cust_id_list = list(cust_id_tup)
+        cust_id = int(cust_id_list[0])
+        magazine_number_of_issues = int(request.form['number_of_issues_magazine'])
         magazine_start_date = request.form['start_date_magazine']
         magazine_end_date = request.form['end_date_magazine']
-        print magazine_number_of_issues, magazine_start_date, magazine_end_date
-        return 'Details have been recorded'
+        magazine_start_date = datetime.strptime(magazine_start_date, '%Y-%m-%d')
+        magazine_end_date = datetime.strptime(magazine_end_date, '%Y-%m-%d')
+        print type(frequency), frequency
+        act_freq = (magazine_end_date - magazine_start_date).days
+        if frequency == 'Weekly':
+            cost = (act_freq/7) * rate * magazine_number_of_issues
+        elif frequency == 'Monthly':
+            cost = (act_freq/30) * rate * magazine_number_of_issues	
+        elif frequency == 'Yearly':
+            cost = (act_freq/365) * rate * magazine_number_of_issues	
+        print cust_id, magazine_number_of_issues, magazine_start_date, magazine_end_date
+        print type(act_freq)
+#        add_customer_sub = "INSERT INTO sub_magazine (id_no, pm_name, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s)"
+#        data_customer_sub = (cust_id, name, magazine_number_of_issues, magazine_start_date, magazine_end_date, magazine_end_date, 1, cost)
+#        cur.execute(add_customer_sub, data_customer_sub)
+#        db.commit()
