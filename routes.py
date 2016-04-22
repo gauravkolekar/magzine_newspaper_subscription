@@ -94,7 +94,7 @@ def magazines():
 @app.route('/daily_newspapers', methods=['GET', 'POST'])
 def daily_newspapers():
     if request.method == 'GET':
-		cur = db.cursor()
+        cur = db.cursor()
         cur.execute("SELECT dnr_name, state, rate FROM daily_newspaper_rate;")
         data = list(cur.fetchall())
         all_newspapers_d = list()
@@ -113,7 +113,7 @@ def magazine_subscription():
     frequency = request.args.get('freq', 10, type=int)
     state = request.args.get('state')
     rate = request.args.get('rate', 10, type=float)
-    print type(frequency), type(rate)
+    print type(frequency), frequency, type(rate), rate
     if request.method == 'GET':
         return render_template('magazine_subscription.html', mag_name=name, mag_frequency=frequency, mag_state=state, mag_rate=rate)
     elif request.method == 'POST':
@@ -138,8 +138,8 @@ def magazine_subscription():
             cost = (act_freq/365) * rate * magazine_number_of_issues	
         print cust_id, magazine_number_of_issues, magazine_start_date, magazine_end_date
         print type(act_freq)
-#        add_customer_sub = "INSERT INTO sub_magazine (id_no, pm_name, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s)"
-#        data_customer_sub = (cust_id, name, magazine_number_of_issues, magazine_start_date, magazine_end_date, magazine_end_date, 1, cost)
-#        cur.execute(add_customer_sub, data_customer_sub)
-#        db.commit()
-    
+        add_customer_sub = "INSERT INTO sub_magazine (id_no, pm_name, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s)"
+        data_customer_sub = (cust_id, name, magazine_number_of_issues, magazine_start_date, magazine_end_date, magazine_end_date, 1, cost)
+        cur.execute(add_customer_sub, data_customer_sub)
+        db.commit()
+        return 'Data has been saved'
