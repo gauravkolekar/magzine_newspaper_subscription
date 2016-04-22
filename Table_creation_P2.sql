@@ -52,11 +52,11 @@ CREATE TABLE newspaper_daily(
 CREATE TABLE sub_newspaper_daily (
     id_no INT,
     pnd_name VARCHAR(20),
+	sub_type VARCHAR(10),
     start_date DATE,
     end_date DATE,
     actual_end_date DATE,
     active_flag BOOLEAN,
-    sub_type int,
     cost DECIMAL(10,5),
     PRIMARY KEY (id_no, pnd_name),
     FOREIGN KEY (id_no)
@@ -66,15 +66,14 @@ CREATE TABLE sub_newspaper_daily (
 );
 
 CREATE TABLE daily_newspaper_rate (
-    id_no INT,
     dnr_name VARCHAR(20),
+	state VARCHAR(20),
     rate DECIMAL(10 , 5 ),
-    PRIMARY KEY (id_no,dnr_name),
-    FOREIGN KEY (id_no)
-        REFERENCES sub_newspaper_daily (id_no),
+    PRIMARY KEY (dnr_name,state),
     FOREIGN KEY (dnr_name)
-        REFERENCES sub_newspaper_daily (pnd_name)
+        REFERENCES newspaper_daily (pn_name)
 );
+
 
 CREATE TABLE newspaper_weekly(
     pn_name VARCHAR(20),
