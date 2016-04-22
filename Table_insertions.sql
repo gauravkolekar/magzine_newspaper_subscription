@@ -11,7 +11,7 @@ INSERT INTO magazine_subscription_rate (pm_name, state, rate ) VALUES ("NewsToda
 INSERT INTO magazine_subscription_rate (pm_name, state, rate ) VALUES ("NewsToday" , "Alabama" , 15);
 INSERT INTO magazine_subscription_rate (pm_name, state, rate ) VALUES ("NewsToday" , "Texas" , 5);
 
-INSERT INTO sub_magazine (id_no, pm_name, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) 
+INSERT INTO sub_magazine (id_no, pm_name, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ); 
 values (1, "NewsToday", 1, current_date(), '2017-05-19','2017-05-19',1,180);
 
 SELECT 

@@ -54,6 +54,30 @@ def add_magazine():
         print magazine_name, magazine_frequency, magazine_editor_name
         if request.form['submit'] == 'Submit':
             return redirect(url_for('index'))
+			
+@app.route('/add_daily_newspaper', methods=['GET','POST'])
+def add_daily_newspaper():
+    if request.method == 'GET':
+        return render_template('add_daily_newspaper.html')
+    elif request.method == 'POST':
+        newspaper_name = str(request.form['newspaper_name'])
+        newspaper_editor_name = str(request.form['newspaper_editor'])
+        state_name = str(request.form['state_name'])
+        rate = int(request.form['rate'])
+        cur = db.cursor()
+        try:
+            add_newspaper_d = "INSERT INTO newspaper_daily (pn_name , editor_nd_name) VALUES (%s,%s)"
+            data_newspaper_d = (newspaper_name,newspaper_editor_name)
+            cur.execute(add_newspaper_d,data_newspaper_d)
+        except:
+               pass
+        add_newspaper_sub_rate = "INSERT INTO daily_newspaper_rate (dnr_name, state, rate) VALUES (%s,%s,%s)"
+        data_newspaper_sub_rate = (newspaper_name,state_name,rate)
+        cur.execute(add_newspaper_sub_rate,data_newspaper_sub_rate)
+        db.commit()
+        print newspaper_name, newspaper_editor_name
+        if request.form['submit'] == 'Submit':
+            return redirect(url_for('index'))			
 
 
 @app.route('/magazines', methods=['GET', 'POST'])
@@ -70,7 +94,13 @@ def magazines():
 @app.route('/daily_newspapers', methods=['GET', 'POST'])
 def daily_newspapers():
     if request.method == 'GET':
-        return render_template('daily_newspapers.html')
+        cur = db.cursor()
+        cur.execute("SELECT dnr_name, state, rate FROM daily_newspaper_rate;")
+        data = list(cur.fetchall())
+        all_newspapers_d = list()
+        for row in data:
+            all_newspapers_d.append(list(row))
+        return render_template('daily_newspapers.html', all_newspapers_d = all_newspapers_d)
 
 @app.route('/weekly_newspapers', methods=['GET', 'POST'])
 def weekly_newspapers():
