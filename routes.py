@@ -94,7 +94,7 @@ def magazines():
 @app.route('/daily_newspapers', methods=['GET', 'POST'])
 def daily_newspapers():
     if request.method == 'GET':
-		cur = db.cursor()
+        cur = db.cursor()
         cur.execute("SELECT dnr_name, state, rate FROM daily_newspaper_rate;")
         data = list(cur.fetchall())
         all_newspapers_d = list()
