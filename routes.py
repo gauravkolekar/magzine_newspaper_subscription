@@ -17,7 +17,7 @@ def index():
         user_name = str(request.form['name'])
         user_address = str(request.form['address'])
         cur = db.cursor()
-        session['my_var'] = user_name
+        session['sub_username'] = user_name
         add_customer = "INSERT INTO CUSTOMER (cname, address) VALUES (%s, %s)"
         data_customer = (user_name, user_address)
         cur.execute(add_customer, data_customer)
@@ -81,17 +81,16 @@ def weekly_newspapers():
 @app.route('/magazine_subscription', methods=['GET','POST'])
 def magazine_subscription():
     name = request.args.get('name')
-    frequency = request.args.get('freq')
-    print type(frequency), frequency
+    frequency = request.args.get('freq', 10, type=int)
     state = request.args.get('state')
-    rate = request.args.get('rate')
+    rate = request.args.get('rate', 10, type=float)
+    print type(frequency), type(rate)
     if request.method == 'GET':
-        print type(frequency), frequency
         return render_template('magazine_subscription.html', mag_name=name, mag_frequency=frequency, mag_state=state, mag_rate=rate)
     elif request.method == 'POST':
         cur = db.cursor()
-        my_var = session.get('my_var', None)
-        cur.execute("SELECT id_no FROM customer WHERE cname = %s", (my_var,))
+        my_var = session.get('sub_username', None)
+        cur.execute("SELECT id_no FROM customer WHERE cname = %s", (my_var))
         cust_id_tup = cur.fetchone()
         cust_id_list = list(cust_id_tup)
         cust_id = int(cust_id_list[0])
@@ -114,3 +113,4 @@ def magazine_subscription():
 #        data_customer_sub = (cust_id, name, magazine_number_of_issues, magazine_start_date, magazine_end_date, magazine_end_date, 1, cost)
 #        cur.execute(add_customer_sub, data_customer_sub)
 #        db.commit()
+    
