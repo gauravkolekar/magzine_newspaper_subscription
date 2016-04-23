@@ -9,7 +9,7 @@
     <p>Frequency:{{mag_frequency}}</p>
     <p>State:{{mag_state}}</p>
     <p>Rate:${{mag_rate|float}}</p>
-    <form action="{{url_for('magazine_subscription')}}" method="post">
+    <form action="{{url_for('magazine_subscription',name=mag_name,freq=mag_frequency,state=mag_state,rate=mag_rate)}}" method="post">
         No of Issues:<br>
         <input type="number" name="number_of_issues_magazine" placeholder="enter required issues"><br>
         Start Date:<br>
