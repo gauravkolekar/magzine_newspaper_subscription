@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Daily Newspaper</title>
+</head>
+<body>
+    <form action="{{url_for('add_daily_newspaper')}}" method="post">
+        Newspaper Name:<br>
+        <input type="text" name="newspaper_name" placeholder="Enter Newspaper name"><br>
+        Editor of the newspaper:<br>
+        <input type="text" name="newspaper_editor" placeholder="Enter the editor's name"><br>
+		State:<br>
+        <input type="text" name="state_name" placeholder="Enter state "><br>
+		Rate:<br>
+        <input type="text" name="rate" placeholder="Enter state's rate"><br>
+        <input type="submit" name="submit" value="Submit">
+    </form>
+</body>
+</html>
