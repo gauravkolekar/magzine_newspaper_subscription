@@ -21,17 +21,17 @@
             <td>{{newspaper[1]}}</td>
             <td>${{newspaper[2]|float }}</td>
             <td>
-                <a href="{{url_for('index',name=newspaper[0],state=newspaper[1],rate=newspaper[2], sub_type = 5)}}">
+                <a href="{{url_for('daily_newspaper_subscription',name=newspaper[0],state=newspaper[1],rate=newspaper[2], sub_type = 5)}}">
                     Subscribe
                 </a>
 			</td>	
 			<td>
-                <a href="{{url_for('index',name=newspaper[0],state=newspaper[1],rate=newspaper[2], sub_type = 2)}}">
+                <a href="{{url_for('daily_newspaper_subscription',name=newspaper[0],state=newspaper[1],rate=newspaper[2], sub_type = 2)}}">
                     Subscribe
                 </a>
 			</td>
 			<td>
-                <a href="{{url_for('index',name=newspaper[0],state=newspaper[1],rate=newspaper[2], sub_type = 7)}}">
+                <a href="{{url_for('daily_newspaper_subscription',name=newspaper[0],state=newspaper[1],rate=newspaper[2], sub_type = 7)}}">
                     Subscribe
                 </a>
 			</td>

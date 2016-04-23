@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Newspaper Subscription</title>
+</head>
+<body>
+    <p>Name:{{newsd_name}}</p>
+    <p>Frequency:{{newsd_sub_type}}</p>
+    <p>State:{{newsd_state}}</p>
+    <p>Rate:${{newsd_rate|float}}</p>
+    <form action="{{url_for('daily_newspaper_subscription',name=newsd_name,state=newsd_state,rate=newsd_rate,sub_type=newsd_sub_type)}}" method="post">
+        No of Issues:<br>
+        <input type="number" name="number_of_issues_newspaperd" placeholder="enter required issues"><br>
+        Start Date:<br>
+        <input type="date" name="start_date_newspaperd" placeholder="enter start date for subscription"><br>
+        End Date:<br>
+        <input type="date" name="end_date_newspaperd" placeholder="enter end date for subscription"><br>
+        <input type="submit" name="submit" value="Submit">
+    </form>
+</body>
+</html>
