@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect, session
 from runserver import app
-from database_configuration import database_configuration as db
-#from db_config import database_configuration as db
+#from database_configuration import database_configuration as db
+from db_config import database_configuration as db
 from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
@@ -152,5 +152,40 @@ def magazine_subscription():
         add_customer_sub = "INSERT INTO sub_magazine (id_no, pm_name, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s)"
         data_customer_sub = (cust_id, name, magazine_number_of_issues, magazine_start_date, magazine_end_date, magazine_end_date, 1, cost)
         cur.execute(add_customer_sub, data_customer_sub)
+        db.commit()
+        return redirect(url_for('subscription'))
+		
+@app.route('/daily_newspaper_subscription', methods=['GET','POST'])
+def daily_newspaper_subscription():
+    cost = 0
+    name = request.args.get('name')
+    sub_type = request.args.get('sub_type')
+    state = request.args.get('state')
+    rate = request.args.get('rate')
+    print "Initial values: ",type(sub_type), sub_type, type(rate), rate
+    if request.method == 'GET':
+        return render_template('daily_newspaper_subscription.html', newsd_name=name, newsd_sub_type=sub_type, newsd_state=state, newsd_rate=rate)
+    elif request.method == 'POST':
+        cur = db.cursor()
+        my_var = session.get('sub_username', None)
+        cur.execute("SELECT id_no FROM customer WHERE cname = %s", [my_var])
+        cust_id_tup = cur.fetchone()
+        cust_id_list = list(cust_id_tup)
+        cust_id = int(cust_id_list[0])
+        newsd_number_of_issues = int(request.form['number_of_issues_newspaperd'])
+        newsd_start_date = request.form['start_date_newspaperd']
+        newsd_end_date = request.form['end_date_newspaperd']
+        newsd_start_date = datetime.strptime(newsd_start_date, '%Y-%m-%d')
+        newsd_end_date = datetime.strptime(newsd_end_date, '%Y-%m-%d')
+        sub_type = int(sub_type)
+        rate = float(rate)
+        act_freq = (newsd_end_date - newsd_start_date).days
+        act_freq = act_freq / 7
+        cost = sub_type * act_freq * newsd_number_of_issues * rate
+        print "List of values: ",cust_id, newsd_number_of_issues, newsd_start_date, newsd_end_date
+        print "Actual cost: ",cost
+        add_customer_newsd_sub = "INSERT INTO sub_newspaper_daily (id_no, pnd_name, no_of_issues, sub_type, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s, %s)"
+        data_customer_newsd_sub = (cust_id, name, newsd_number_of_issues, sub_type, newsd_start_date, newsd_end_date, newsd_end_date, 1, cost)
+        cur.execute(add_customer_newsd_sub, data_customer_newsd_sub)
         db.commit()
         return redirect(url_for('subscription'))
