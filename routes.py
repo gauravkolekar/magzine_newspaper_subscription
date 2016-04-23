@@ -60,7 +60,7 @@ def add_magazine():
             cur.execute(query, query_data)
             db.commit()
             return render_template('add_magazine.html')
-			
+
 @app.route('/add_daily_newspaper', methods=['GET','POST'])
 def add_daily_newspaper():
     if request.method == 'GET':
@@ -84,6 +84,40 @@ def add_daily_newspaper():
         print newspaper_name, newspaper_editor_name
         if request.form['submit'] == 'Submit':
             return redirect(url_for('index'))			
+
+@app.route('/add_weekly_newspaper', methods=['GET', 'POST'])
+def add_weekly_newspaper():
+    if request.method == 'GET':
+        return render_template('add_weekly_newspaper.html')
+    elif request.method == 'POST':
+        weekly_newspaper_name = str(request.form['weekly_newspaper_name'])
+        weekly_newspaper_frequency = str(request.form['weekly_newspaper_frequency'])
+        weekly_newspaper_editor_name = str(request.form['weekly_newspaper_editor'])
+        weekly_newspaper_state_name = str(request.form['weekly_newspaper_state_name'])
+        weekly_newspaper_rate = int(request.form['weekly_newspaper_rate'])
+        cur = db.cursor()
+        if request.form['submit'] == 'Submit':
+            try:
+                add_weekly_magazine = "INSERT INTO NEWSPAPER_WEEKLY (pn_name , editor_nw_name) VALUES (%s, %s)"
+                data_weekly_newspaper = (weekly_newspaper_name, weekly_newspaper_editor_name)
+                cur.execute(add_weekly_magazine, data_weekly_newspaper)
+            except:
+                pass
+            '''
+            add_magazine_sub_rate = "INSERT INTO magazine_subscription_rate (pm_name, state, rate) VALUES (%s,%s,%s)"
+            data_magazine_sub_rate = (magazine_name, state_name, rate)
+            cur.execute(add_magazine_sub_rate, data_magazine_sub_rate)
+            db.commit()
+            # print magazine_name, magazine_frequency, magazine_editor_name
+            return redirect(url_for('index'))
+        else:
+            query = "UPDATE MAGAZINE SET frequency %s, editorm_name %s WHERE pm_name = %s"
+            query_data = (magazine_frequency, magazine_editor_name, magazine_name)
+            cur.execute(query, query_data)
+            db.commit()
+            return render_template('add_magazine.html')
+            '''
+
 
 
 @app.route('/magazines', methods=['GET', 'POST'])
