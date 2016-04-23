@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect, session
 from runserver import app
-#from database_configuration import database_configuration as db
-from db_config import database_configuration as db
+from database_configuration import database_configuration as db
+#from db_config import database_configuration as db
 from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
@@ -41,19 +41,25 @@ def add_magazine():
         state_name = str(request.form['state_name'])
         rate = int(request.form['rate'])
         cur = db.cursor()
-        try:
-            add_magazine = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
-            data_magazine = (magazine_name,magazine_frequency,magazine_editor_name)
-            cur.execute(add_magazine,data_magazine)
-        except:
-               pass
-        add_magazine_sub_rate = "INSERT INTO magazine_subscription_rate (pm_name, state, rate) VALUES (%s,%s,%s)"
-        data_magazine_sub_rate = (magazine_name,state_name,rate)
-        cur.execute(add_magazine_sub_rate,data_magazine_sub_rate)
-        db.commit()
-        print magazine_name, magazine_frequency, magazine_editor_name
         if request.form['submit'] == 'Submit':
+            try:
+                add_magazine = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
+                data_magazine = (magazine_name,magazine_frequency,magazine_editor_name)
+                cur.execute(add_magazine,data_magazine)
+            except:
+                pass
+            add_magazine_sub_rate = "INSERT INTO magazine_subscription_rate (pm_name, state, rate) VALUES (%s,%s,%s)"
+            data_magazine_sub_rate = (magazine_name,state_name,rate)
+            cur.execute(add_magazine_sub_rate,data_magazine_sub_rate)
+            db.commit()
+            #print magazine_name, magazine_frequency, magazine_editor_name
             return redirect(url_for('index'))
+        else:
+            query = "UPDATE MAGAZINE SET frequency %s, editorm_name %s WHERE pm_name = %s"
+            query_data = (magazine_frequency, magazine_editor_name, magazine_name)
+            cur.execute(query, query_data)
+            db.commit()
+            return render_template('add_magazine.html')
 			
 @app.route('/add_daily_newspaper', methods=['GET','POST'])
 def add_daily_newspaper():
@@ -117,7 +123,9 @@ def magazine_subscription():
     print "Initial values: ",type(frequency), frequency, type(rate), rate
     if request.method == 'GET':
         return render_template('magazine_subscription.html', mag_name=name, mag_frequency=frequency, mag_state=state, mag_rate=rate)
+
     elif request.method == 'POST':
+        print type(frequency), frequency, type(rate), rate
         cur = db.cursor()
         my_var = session.get('sub_username', None)
         cur.execute("SELECT id_no FROM customer WHERE cname = %s", [my_var])
