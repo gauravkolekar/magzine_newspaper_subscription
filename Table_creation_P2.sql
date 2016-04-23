@@ -11,6 +11,13 @@ DROP TABLE newspaper_weekly;
 DROP TABLE magazine;
 DROP TABLE customer;
 
+CREATE TABLE customer (
+    id_no INT AUTO_INCREMENT,
+    cname VARCHAR(20),
+    address VARCHAR(40),
+    PRIMARY KEY (id_no)
+);
+
 CREATE TABLE magazine (
     pm_name VARCHAR(20),
     frequency VARCHAR(10),
@@ -52,7 +59,8 @@ CREATE TABLE newspaper_daily(
 CREATE TABLE sub_newspaper_daily (
     id_no INT,
     pnd_name VARCHAR(20),
-	sub_type VARCHAR(10),
+    no_of_issues INT,
+	sub_type int,
     start_date DATE,
     end_date DATE,
     actual_end_date DATE,
@@ -84,6 +92,7 @@ CREATE TABLE newspaper_weekly(
 CREATE TABLE sub_newspaper_weekly (
     id_no INT,
     pnw_name VARCHAR(20),
+	no_of_issues INT,
     start_date DATE,
     end_date DATE,
     actual_end_date DATE,
@@ -97,12 +106,10 @@ CREATE TABLE sub_newspaper_weekly (
 );
 
 CREATE TABLE weekly_newspaper_rate (
-    id_no INT,
     wnr_name VARCHAR(20),
+	state VARCHAR(20),
     rate DECIMAL(10 , 5 ),
-    PRIMARY KEY (id_no,wnr_name),
-    FOREIGN KEY (id_no)
-        REFERENCES sub_newspaper_weekly (id_no),
+    PRIMARY KEY (wnr_name,state),
     FOREIGN KEY (wnr_name)
-        REFERENCES sub_newspaper_weekly (pnw_name)
+        REFERENCES newspaper_weekly (pn_name)
 );
