@@ -13,7 +13,7 @@ DROP TABLE customer;
 
 CREATE TABLE customer (
     id_no INT AUTO_INCREMENT,
-    cname VARCHAR(20),
+    cname VARCHAR(20) unique,
     address VARCHAR(40),
     PRIMARY KEY (id_no)
 );
