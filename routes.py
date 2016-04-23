@@ -18,10 +18,13 @@ def index():
         user_address = str(request.form['address'])
         cur = db.cursor()
         session['sub_username'] = user_name
-        add_customer = "INSERT INTO CUSTOMER (cname, address) VALUES (%s, %s)"
-        data_customer = (user_name, user_address)
-        cur.execute(add_customer, data_customer)
-        db.commit()
+        try:
+            add_customer = "INSERT INTO CUSTOMER (cname, address) VALUES (%s, %s)"
+            data_customer = (user_name, user_address)
+            cur.execute(add_customer, data_customer)
+            db.commit()
+        except:
+            pass	
         #print user_name, user_address
         if request.form['submit'] == 'Submit':
             return redirect(url_for('subscription'))
