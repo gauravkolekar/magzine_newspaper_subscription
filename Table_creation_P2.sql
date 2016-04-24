@@ -28,17 +28,18 @@ CREATE TABLE magazine (
 CREATE TABLE sub_magazine (
     id_no INT,
     pm_name VARCHAR(20),
+    state VARCHAR(20),
     no_of_issues INT,
     start_date DATE,
     end_date DATE NOT NULL,   
     actual_end_date DATE,
     active_flag BOOLEAN,
     cost DECIMAL(10,5),
-    PRIMARY KEY (id_no,pm_name),
+    PRIMARY KEY (id_no,pm_name,state),
     FOREIGN KEY (id_no)
         REFERENCES customer (id_no),
-    FOREIGN KEY (pm_name)
-        REFERENCES magazine (pm_name)
+    FOREIGN KEY (pm_name,state)
+        REFERENCES magazine_subscription_rate (pm_name,state)
 );
 
 CREATE TABLE magazine_subscription_rate (
