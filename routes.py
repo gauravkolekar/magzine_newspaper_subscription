@@ -1,8 +1,8 @@
 from flask import render_template, request, url_for, redirect, session
 from runserver import app
-#from database_configuration import database_configuration as db
-from db_config import database_configuration as db
-from datetime import datetime, date	
+from database_configuration import database_configuration as db
+#from db_config import database_configuration as db
+from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -33,6 +33,7 @@ def index():
 def subscription():
     return render_template('subscription.html')
 
+#Gaurav Kolekar
 @app.route('/add_magazine', methods=['GET','POST'])
 def add_magazine():
     if request.method == 'GET':
@@ -57,13 +58,16 @@ def add_magazine():
             db.commit()
             #print magazine_name, magazine_frequency, magazine_editor_name
             return redirect(url_for('index'))
+        '''
         else:
             query = "UPDATE MAGAZINE SET frequency %s, editorm_name %s WHERE pm_name = %s"
             query_data = (magazine_frequency, magazine_editor_name, magazine_name)
             cur.execute(query, query_data)
             db.commit()
             return render_template('add_magazine.html')
-			
+        '''
+#Gaurav Kolekar
+
 @app.route('/add_daily_newspaper', methods=['GET','POST'])
 def add_daily_newspaper():
     if request.method == 'GET':
@@ -88,7 +92,42 @@ def add_daily_newspaper():
         if request.form['submit'] == 'Submit':
             return redirect(url_for('index'))			
 
+# Gaurav Kolekar
+@app.route('/add_weekly_newspaper', methods=['GET', 'POST'])
+def add_weekly_newspaper():
+    if request.method == 'GET':
+        return render_template('add_weekly_newspaper.html')
+    elif request.method == 'POST':
+        weekly_newspaper_name = str(request.form['weekly_newspaper_name'])
+        weekly_newspaper_frequency = str(request.form['weekly_newspaper_frequency'])
+        weekly_newspaper_editor_name = str(request.form['weekly_newspaper_editor'])
+        weekly_newspaper_state_name = str(request.form['weekly_newspaper_state_name'])
+        weekly_newspaper_rate = int(request.form['weekly_newspaper_rate'])
+        cur = db.cursor()
+        if request.form['submit'] == 'Submit':
+            try:
+                add_weekly_magazine = "INSERT INTO NEWSPAPER_WEEKLY (pn_name , editor_nw_name) VALUES (%s, %s)"
+                data_weekly_newspaper = (weekly_newspaper_name, weekly_newspaper_editor_name)
+                cur.execute(add_weekly_magazine, data_weekly_newspaper)
+            except:
+                pass
+            add_weekly_newspaper_rate = "INSERT INTO weekly_newspaper_rate(wnr_name, state, rate) VALUES (%s,%s,%s)"
+            data_weekly_newspaper_rate = (weekly_newspaper_name, weekly_newspaper_state_name, weekly_newspaper_rate)
+            cur.execute(add_weekly_newspaper_rate, data_weekly_newspaper_rate)
+            db.commit()
+            # print weekly_newspaper_name, weekly_newspaper_state_name, weekly_newspaper_rate
+            return redirect(url_for('index'))
+        '''
+        else:
+            query = "UPDATE MAGAZINE SET frequency %s, editorm_name %s WHERE pm_name = %s"
+            query_data = (magazine_frequency, magazine_editor_name, magazine_name)
+            cur.execute(query, query_data)
+            db.commit()
+            return render_template('add_magazine.html')
+        '''
+#Gaurav Kolekar
 
+#Gaurav Kolekar
 @app.route('/magazines', methods=['GET', 'POST'])
 def magazines():
     if request.method == 'GET':
@@ -99,6 +138,7 @@ def magazines():
         for row in data:
             all_magazines.append(list(row))
         return render_template('magazines.html', all_magazines=all_magazines)
+#Gaurav Kolekar
 
 @app.route('/daily_newspapers', methods=['GET', 'POST'])
 def daily_newspapers():
@@ -111,11 +151,18 @@ def daily_newspapers():
             all_newspapers_d.append(list(row))
         return render_template('daily_newspapers.html', all_newspapers_d = all_newspapers_d)
 
-
 @app.route('/weekly_newspapers', methods=['GET', 'POST'])
 def weekly_newspapers():
     if request.method == 'GET':
-        return render_template('weekly_newspapers.html')
+        cur = db.cursor()
+        get_all_weekly_newspaper_query = "SELECT wnr_name, state, rate FROM weekly_newspaper_rate"
+        cur.execute(get_all_weekly_newspaper_query)
+        data = cur.fetchall()
+        all_weekly_newspaper = list()
+        for row in data:
+            all_weekly_newspaper.append(list(row))
+        return render_template('weekly_newspapers.html', all_weekly_newspaper=all_weekly_newspaper)
+#Gaurav Kolekar
 
 @app.route('/magazine_subscription', methods=['GET','POST'])
 def magazine_subscription():
@@ -124,10 +171,9 @@ def magazine_subscription():
     frequency = request.args.get('freq')
     state = request.args.get('state')
     rate = request.args.get('rate')
-    print "Initial values: ",type(frequency), frequency, type(rate), rate
+    #print "Initial values: ",type(frequency), frequency, type(rate), rate
     if request.method == 'GET':
         return render_template('magazine_subscription.html', mag_name=name, mag_frequency=frequency, mag_state=state, mag_rate=rate)
-
     elif request.method == 'POST':
         print type(frequency), frequency, type(rate), rate
         cur = db.cursor()
@@ -158,7 +204,7 @@ def magazine_subscription():
         cur.execute(add_customer_sub, data_customer_sub)
         db.commit()
         return redirect(url_for('subscription'))
-		
+
 @app.route('/daily_newspaper_subscription', methods=['GET','POST'])
 def daily_newspaper_subscription():
     cost = 0
@@ -193,3 +239,36 @@ def daily_newspaper_subscription():
         cur.execute(add_customer_newsd_sub, data_customer_newsd_sub)
         db.commit()
         return redirect(url_for('subscription'))
+
+#Gaurav Kolekar
+@app.route('/weekly_newspaper_subscription', methods=['GET', 'POST'])
+def weekly_newspaper_subscription():
+    cost = 0
+    weekly_newspaper_name = request.args.get('weekly_newspaper_name')
+    weekly_newspaper_frequency = 'Weekly'
+    weekly_newspaper_state = request.args.get('weekly_newspaper_state')
+    weekly_magazine_rate = request.args.get('weekly_magazine_rate')
+    if request.method == 'GET':
+        return render_template('weekly_newspaper_subscription.html', wnp_name=weekly_newspaper_name, wnp_state=weekly_newspaper_state, wnp_rate=weekly_magazine_rate)
+    elif request.method == 'POST':
+        cur = db.cursor()
+        my_var = session.get('sub_username', None)
+        cur.execute("SELECT id_no FROM customer WHERE cname = %s", [my_var])
+        cust_id_tup = cur.fetchone()
+        cust_id_list = list(cust_id_tup)
+        cust_id = int(cust_id_list[0])
+        weekly_newspaper_number_of_issues = int(request.form['number_of_issues_weekly_newspaper'])
+        weekly_newspaper_start_date = request.form['start_date_weekly_newspaper']
+        weekly_newspaper_end_date = request.form['end_date_weekly_newspaper']
+        weekly_newspaper_start_date = datetime.strptime(weekly_newspaper_start_date, '%Y-%m-%d')
+        weekly_newspaper_end_date = datetime.strptime(weekly_newspaper_end_date, '%Y-%m-%d')
+        frequency = str(weekly_newspaper_frequency)
+        rate = float(weekly_magazine_rate)
+        act_freq = (weekly_newspaper_end_date - weekly_newspaper_start_date).days
+        cost = (act_freq / 7) * rate * weekly_newspaper_number_of_issues
+        query_weekly_newspaper_sub = "INSERT INTO sub_newspaper_weekly (id_no, pnw_name, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s)"
+        data_weekly_newspaper_sub = (cust_id, weekly_newspaper_name, weekly_newspaper_number_of_issues, weekly_newspaper_start_date, weekly_newspaper_end_date, weekly_newspaper_end_date, 1, cost)
+        cur.execute(query_weekly_newspaper_sub, data_weekly_newspaper_sub)
+        db.commit()
+        return redirect(url_for('subscription'))
+#Gaurav Kolekar

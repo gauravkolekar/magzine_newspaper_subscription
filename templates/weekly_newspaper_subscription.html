@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weekly Newspaper Subscription</title>
+</head>
+<body>
+    <p>Name:{{wnp_name}}</p>
+    <p>Frequency:Weekly</p>
+    <p>State:{{wnp_state}}</p>
+    <p>Rate:${{wnp_rate|float}}</p>
+
+    <form action="{{url_for('weekly_newspaper_subscription',weekly_newspaper_name=wnp_name,weekly_newspaper_state=wnp_state,weekly_magazine_rate=wnp_rate)}}" method="post">
+        No of Issues:<br>
+        <input type="number" name="number_of_issues_weekly_newspaper" placeholder="enter required issues"><br>
+        Start Date:<br>
+        <input type="date" name="start_date_weekly_newspaper" placeholder="enter start date for subscription"><br>
+        End Date:<br>
+        <input type="date" name="end_date_weekly_newspaper" placeholder="enter end date for subscription"><br>
+        <input type="submit" name="submit" value="Submit">
+    </form>
+</body>
+</html>
