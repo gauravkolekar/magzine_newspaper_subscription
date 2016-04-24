@@ -59,8 +59,13 @@ def add_magazine():
            db.commit()
            return redirect(url_for('index'))
         elif button_value == 'update':
-            query = "UPDATE MAGAZINE SET frequency %s, editorm_name %s WHERE pm_name = %s"
+            print magazine_frequency, magazine_editor_name, magazine_name
+            query = "UPDATE MAGAZINE SET frequency = %s, editorm_name = %s WHERE pm_name = %s;"
             query_data = (magazine_frequency, magazine_editor_name, magazine_name)
+            cur.execute(query, query_data)
+            db.commit()
+            query = "UPDATE magazine_subscription_rate SET rate = %s  WHERE pm_name = %s and state = %s;"
+            query_data = (rate, magazine_name, state_name)
             cur.execute(query, query_data)
             db.commit()
             return render_template('add_magazine.html')
