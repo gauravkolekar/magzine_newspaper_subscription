@@ -60,6 +60,7 @@ CREATE TABLE newspaper_daily(
 CREATE TABLE sub_newspaper_daily (
     id_no INT,
     pnd_name VARCHAR(20),
+    state VARCHAR(20),
     no_of_issues INT,
 	sub_type int,
     start_date DATE,
@@ -67,11 +68,11 @@ CREATE TABLE sub_newspaper_daily (
     actual_end_date DATE,
     active_flag BOOLEAN,
     cost DECIMAL(10,5),
-    PRIMARY KEY (id_no, pnd_name),
+    PRIMARY KEY (id_no, pnd_name,state),
     FOREIGN KEY (id_no)
         REFERENCES customer (id_no),
-    FOREIGN KEY (pnd_name)
-        REFERENCES newspaper_daily (pn_name)
+    FOREIGN KEY (pnd_name,state)
+        REFERENCES daily_newspaper_rate (dnr_name,state)
 );
 
 CREATE TABLE daily_newspaper_rate (
