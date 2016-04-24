@@ -21,7 +21,7 @@
             <td>{{weekly_newspaper[1]}}</td>
             <td>${{weekly_newspaper[2]|float }}</td>
             <td>
-                <a href="">
+                <a href="{{url_for('weekly_newspaper_subscription',weekly_newspaper_name=weekly_newspaper[0],weekly_newspaper_state=weekly_newspaper[1],weekly_magazine_rate=weekly_newspaper[2])}}">
                     Subscribe
                 </a>
             </td>

@@ -172,10 +172,9 @@ def magazine_subscription():
     frequency = request.args.get('freq')
     state = request.args.get('state')
     rate = request.args.get('rate')
-    print "Initial values: ",type(frequency), frequency, type(rate), rate
+    #print "Initial values: ",type(frequency), frequency, type(rate), rate
     if request.method == 'GET':
         return render_template('magazine_subscription.html', mag_name=name, mag_frequency=frequency, mag_state=state, mag_rate=rate)
-
     elif request.method == 'POST':
         print type(frequency), frequency, type(rate), rate
         cur = db.cursor()
@@ -206,7 +205,7 @@ def magazine_subscription():
         cur.execute(add_customer_sub, data_customer_sub)
         db.commit()
         return redirect(url_for('subscription'))
-		
+
 @app.route('/daily_newspaper_subscription', methods=['GET','POST'])
 def daily_newspaper_subscription():
     cost = 0
@@ -241,3 +240,36 @@ def daily_newspaper_subscription():
         cur.execute(add_customer_newsd_sub, data_customer_newsd_sub)
         db.commit()
         return redirect(url_for('subscription'))
+
+#Gaurav Kolekar
+@app.route('/weekly_newspaper_subscription', methods=['GET', 'POST'])
+def weekly_newspaper_subscription():
+    cost = 0
+    weekly_newspaper_name = request.args.get('weekly_newspaper_name')
+    weekly_newspaper_frequency = 'Weekly'
+    weekly_newspaper_state = request.args.get('weekly_newspaper_state')
+    weekly_magazine_rate = request.args.get('weekly_magazine_rate')
+    if request.method == 'GET':
+        return render_template('weekly_newspaper_subscription.html', wnp_name=weekly_newspaper_name, wnp_state=weekly_newspaper_state, wnp_rate=weekly_magazine_rate)
+    elif request.method == 'POST':
+        cur = db.cursor()
+        my_var = session.get('sub_username', None)
+        cur.execute("SELECT id_no FROM customer WHERE cname = %s", [my_var])
+        cust_id_tup = cur.fetchone()
+        cust_id_list = list(cust_id_tup)
+        cust_id = int(cust_id_list[0])
+        weekly_newspaper_number_of_issues = int(request.form['number_of_issues_weekly_newspaper'])
+        weekly_newspaper_start_date = request.form['start_date_weekly_newspaper']
+        weekly_newspaper_end_date = request.form['end_date_weekly_newspaper']
+        weekly_newspaper_start_date = datetime.strptime(weekly_newspaper_start_date, '%Y-%m-%d')
+        weekly_newspaper_end_date = datetime.strptime(weekly_newspaper_end_date, '%Y-%m-%d')
+        frequency = str(weekly_newspaper_frequency)
+        rate = float(weekly_magazine_rate)
+        act_freq = (weekly_newspaper_end_date - weekly_newspaper_start_date).days
+        cost = (act_freq / 7) * rate * weekly_newspaper_number_of_issues
+        query_weekly_newspaper_sub = "INSERT INTO sub_newspaper_weekly (id_no, pnw_name, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s)"
+        data_weekly_newspaper_sub = (cust_id, weekly_newspaper_name, weekly_newspaper_number_of_issues, weekly_newspaper_start_date, weekly_newspaper_end_date, weekly_newspaper_end_date, 1, cost)
+        cur.execute(query_weekly_newspaper_sub, data_weekly_newspaper_sub)
+        db.commit()
+        return redirect(url_for('subscription'))
+#Gaurav Kolekar
