@@ -94,17 +94,18 @@ CREATE TABLE newspaper_weekly(
 CREATE TABLE sub_newspaper_weekly (
     id_no INT,
     pnw_name VARCHAR(20),
+	state VARCHAR(20),
 	no_of_issues INT,
     start_date DATE,
     end_date DATE,
     actual_end_date DATE,
     active_flag BOOLEAN,
     cost DECIMAL(10,5),
-    PRIMARY KEY (id_no, pnw_name),
+    PRIMARY KEY (id_no, pnw_name,state),
     FOREIGN KEY (id_no)
         REFERENCES customer (id_no),
-    FOREIGN KEY (pnw_name)
-        REFERENCES newspaper_weekly (pn_name)
+    FOREIGN KEY (pnw_name,state)
+        REFERENCES weekly_newspaper_rate (wnr_name,state)
 );
 
 CREATE TABLE weekly_newspaper_rate (
