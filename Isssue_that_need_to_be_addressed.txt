@@ -1,0 +1,1 @@
+1. All Add pages(add_magazine,add_weekly_newspaper, etc) are not able to handle a long newspaper name I tried "The Times of Wayne County"

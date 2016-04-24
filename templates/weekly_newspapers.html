@@ -14,6 +14,19 @@
             <th>Newspaper Rate</th>
             <th>Subscription Link</th>
         </tr>
+        {%for weekly_newspaper in all_weekly_newspaper%}
+        <tr>
+            <td>{{weekly_newspaper[0]}}</td>
+            <td>Weekly</td>
+            <td>{{weekly_newspaper[1]}}</td>
+            <td>${{weekly_newspaper[2]|float }}</td>
+            <td>
+                <a href="">
+                    Subscribe
+                </a>
+            </td>
+        </tr>
+        {%endfor%}
     </table>
 </body>
 </html>
