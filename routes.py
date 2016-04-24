@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect, session
 from runserver import app
-#from database_configuration import database_configuration as db
-from db_config import database_configuration as db
+from database_configuration import database_configuration as db
+#from db_config import database_configuration as db
 from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
@@ -59,7 +59,7 @@ def add_magazine():
            db.commit()
            return redirect(url_for('index'))
         elif button_value == 'update':
-            query = "UPDATE MAGAZINE SET frequency %s, editorm_name %s WHERE pm_name = %s"
+            query = ("UPDATE MAGAZINE SET frequency %s, editorm_name %s WHERE pm_name = %s")
             query_data = (magazine_frequency, magazine_editor_name, magazine_name)
             cur.execute(query, query_data)
             db.commit()
