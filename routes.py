@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect, session
 from runserver import app
-from database_configuration import database_configuration as db
-#from db_config import database_configuration as db
+#from database_configuration import database_configuration as db
+from db_config import database_configuration as db
 from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
@@ -150,6 +150,17 @@ def daily_newspapers():
         for row in data:
             all_newspapers_d.append(list(row))
         return render_template('daily_newspapers.html', all_newspapers_d = all_newspapers_d)
+		
+@app.route('/all_magazines_sub', methods =['GET'])
+def all_magazines_sub():
+    if request.method == 'GET':
+        cur = db.cursor()
+        cur.execute("select c1.cname, c1.address, s1.pm_name, m1.frequency, m2.state, m2.rate, s1.end_date, s1.cost from customer c1, sub_magazine s1, magazine m1, magazine_subscription_rate m2 where s1.id_no = c1.id_no and s1.pm_name = m2.pm_name and s1.state = m2.state and m1.pm_name = m2.pm_name;")
+        data = list(cur.fetchall())
+        all_mag_sub = list()
+        for row in data:
+            all_mag_sub.append(list(row))
+        return render_template('all_magazines_sub.html', all_mag_sub = all_mag_sub)		
 
 @app.route('/weekly_newspapers', methods=['GET', 'POST'])
 def weekly_newspapers():
