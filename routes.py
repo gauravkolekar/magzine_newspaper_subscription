@@ -2,7 +2,7 @@ from flask import render_template, request, url_for, redirect, session
 from runserver import app
 #from database_configuration import database_configuration as db
 from db_config import database_configuration as db
-from datetime import datetime, date
+from datetime import datetime, date	
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -111,6 +111,7 @@ def daily_newspapers():
             all_newspapers_d.append(list(row))
         return render_template('daily_newspapers.html', all_newspapers_d = all_newspapers_d)
 
+
 @app.route('/weekly_newspapers', methods=['GET', 'POST'])
 def weekly_newspapers():
     if request.method == 'GET':
@@ -150,10 +151,10 @@ def magazine_subscription():
             cost = (act_freq/30) * rate * magazine_number_of_issues	
         elif frequency == 'Yearly':
             cost = (act_freq/365) * rate * magazine_number_of_issues	
-        print "List of values: ",cust_id, magazine_number_of_issues, magazine_start_date, magazine_end_date
+        print "List of values: ",cust_id, magazine_number_of_issues, magazine_start_date, magazine_end_date, state
         print "Actual cost: ",cost
-        add_customer_sub = "INSERT INTO sub_magazine (id_no, pm_name, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s)"
-        data_customer_sub = (cust_id, name, magazine_number_of_issues, magazine_start_date, magazine_end_date, magazine_end_date, 1, cost)
+        add_customer_sub = "INSERT INTO sub_magazine (id_no, pm_name, state, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s,%s)"
+        data_customer_sub = (cust_id, name, state, magazine_number_of_issues, magazine_start_date, magazine_end_date, magazine_end_date, 1, cost)
         cur.execute(add_customer_sub, data_customer_sub)
         db.commit()
         return redirect(url_for('subscription'))
