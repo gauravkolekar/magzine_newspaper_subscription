@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect, session
 from runserver import app
-from database_configuration import database_configuration as db
-#from db_config import database_configuration as db
+#from database_configuration import database_configuration as db
+from db_config import database_configuration as db
 from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
@@ -279,11 +279,12 @@ def weekly_newspaper_subscription():
         weekly_newspaper_start_date = datetime.strptime(weekly_newspaper_start_date, '%Y-%m-%d')
         weekly_newspaper_end_date = datetime.strptime(weekly_newspaper_end_date, '%Y-%m-%d')
         frequency = str(weekly_newspaper_frequency)
+        weekly_newspaper_state = str(weekly_newspaper_state)
         rate = float(weekly_magazine_rate)
         act_freq = (weekly_newspaper_end_date - weekly_newspaper_start_date).days
         cost = (act_freq / 7) * rate * weekly_newspaper_number_of_issues
-        query_weekly_newspaper_sub = "INSERT INTO sub_newspaper_weekly (id_no, pnw_name, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s)"
-        data_weekly_newspaper_sub = (cust_id, weekly_newspaper_name, weekly_newspaper_number_of_issues, weekly_newspaper_start_date, weekly_newspaper_end_date, weekly_newspaper_end_date, 1, cost)
+        query_weekly_newspaper_sub = "INSERT INTO sub_newspaper_weekly (id_no, pnw_name, state, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s,%s)"
+        data_weekly_newspaper_sub = (cust_id, weekly_newspaper_name, weekly_newspaper_state, weekly_newspaper_number_of_issues, weekly_newspaper_start_date, weekly_newspaper_end_date,weekly_newspaper_end_date, 1, cost)
         cur.execute(query_weekly_newspaper_sub, data_weekly_newspaper_sub)
         db.commit()
         return redirect(url_for('subscription'))
@@ -316,4 +317,15 @@ def all_newsd_sub():
             elif lst[3] == 2:
                 lst[3] = "Saturday and Sunday"
             all_newsd_sub.append(lst)
-        return render_template('all_newsd_sub.html', all_newsd_sub = all_newsd_sub)			
+        return render_template('all_newsd_sub.html', all_newsd_sub = all_newsd_sub)	
+
+@app.route('/all_newsw_sub', methods =['GET'])
+def all_newsw_sub():
+    if request.method == 'GET':
+        cur = db.cursor()
+        cur.execute("select c1.cname, c1.address, s1.pnw_name, s1.state, m2.rate, s1.end_date, s1.cost from customer c1, sub_newspaper_weekly s1, newspaper_weekly m1, weekly_newspaper_rate m2 where s1.id_no = c1.id_no and s1.pnw_name = m2.wnr_name and s1.state = m2.state and m1.pn_name = m2.wnr_name;")
+        data = list(cur.fetchall())
+        all_newsw_sub = list()
+        for row in data:
+            all_newsw_sub.append(list(row))
+        return render_template('all_newsw_sub.html', all_newsw_sub = all_newsw_sub)		
