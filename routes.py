@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect, session
 from runserver import app
-#from database_configuration import database_configuration as db
-from db_config import database_configuration as db
+from database_configuration import database_configuration as db
+#from db_config import database_configuration as db
 from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
@@ -163,7 +163,8 @@ def all_magazines_sub():
         all_mag_sub = list()
         for row in data:
             all_mag_sub.append(list(row))
-        return render_template('all_magazines_sub.html', all_mag_sub = all_mag_sub)		
+        return render_template('all_magazines_sub.html', all_mag_sub = all_mag_sub)
+	
 
 @app.route('/weekly_newspapers', methods=['GET', 'POST'])
 def weekly_newspapers():
@@ -248,7 +249,7 @@ def daily_newspaper_subscription():
         cost = sub_type * act_freq * newsd_number_of_issues * rate
         print "List of values: ",cust_id, newsd_number_of_issues, newsd_start_date, newsd_end_date
         print "Actual cost: ",cost
-        add_customer_newsd_sub = "INSERT INTO sub_newspaper_daily (id_no, pnd_name, no_of_issues, sub_type, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s, %s)"
+        add_customer_newsd_sub = "INSERT INTO sub_newspaper_daily (id_no, pnd_name, no_of_issues, sub_type, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s, %s,%s)"
         data_customer_newsd_sub = (cust_id, name, newsd_number_of_issues, sub_type, newsd_start_date, newsd_end_date, newsd_end_date, 1, cost)
         cur.execute(add_customer_newsd_sub, data_customer_newsd_sub)
         db.commit()
