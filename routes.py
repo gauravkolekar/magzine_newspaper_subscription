@@ -250,8 +250,8 @@ def daily_newspaper_subscription():
         cost = sub_type * act_freq * newsd_number_of_issues * rate
         print "List of values: ",cust_id, newsd_number_of_issues, newsd_start_date, newsd_end_date
         print "Actual cost: ",cost
-        add_customer_newsd_sub = "INSERT INTO sub_newspaper_daily (id_no, pnd_name, no_of_issues, sub_type, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s, %s,%s)"
-        data_customer_newsd_sub = (cust_id, name, newsd_number_of_issues, sub_type, newsd_start_date, newsd_end_date, newsd_end_date, 1, cost)
+        add_customer_newsd_sub = "INSERT INTO sub_newspaper_daily (id_no, pnd_name, state, no_of_issues, sub_type, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s, %s,%s)"
+        data_customer_newsd_sub = (cust_id, name, state, newsd_number_of_issues, sub_type, newsd_start_date, newsd_end_date, newsd_end_date, 1, cost)
         cur.execute(add_customer_newsd_sub, data_customer_newsd_sub)
         db.commit()
         return redirect(url_for('subscription'))
@@ -299,3 +299,21 @@ def all_magazines_sub():
         for row in data:
             all_mag_sub.append(list(row))
         return render_template('all_magazines_sub.html', all_mag_sub = all_mag_sub)
+
+@app.route('/all_newsd_sub', methods =['GET'])
+def all_newsd_sub():
+    if request.method == 'GET':
+        cur = db.cursor()
+        cur.execute("select c1.cname, c1.address, s1.pnd_name, s1.sub_type, m2.state, m2.rate, s1.end_date, s1.cost from customer c1, sub_newspaper_daily s1, newspaper_daily m1, daily_newspaper_rate m2 where s1.id_no = c1.id_no and s1.pnd_name = m2.dnr_name and s1.state = m2.state and m1.pn_name = m2.dnr_name;")
+        data = list(cur.fetchall())
+        all_newsd_sub = list()
+        for row in data:
+            lst = list(row)
+            if lst[3] == 5:
+                lst[3] = "Monday to Friday"
+            elif lst[3] == 7:
+                lst[3] = "Monday to Sunday"
+            elif lst[3] == 2:
+                lst[3] = "Saturday and Sunday"
+            all_newsd_sub.append(lst)
+        return render_template('all_newsd_sub.html', all_newsd_sub = all_newsd_sub)			
