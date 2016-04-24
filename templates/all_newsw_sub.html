@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Magazine Subscriptions</title>
+</head>
+<body>
+    <p>Welcome! All Weekly Newspaper Subscriptions</p>
+    <table style="width: 100%">
+        <tr>
+			<th>Customer Name</th>
+			<th>Customer Address</th>
+            <th>Weekly Newspaper Name</th>
+            <th>Weekly Newspaper Frequency</th>
+            <th>Weekly Newspaper distribution state</th>
+            <th>Weekly Newspaper Rate</th>
+            <th>Subscription End Date</th>
+			<th>Subscription Cost</th>
+        </tr>
+        {%for weekly_newspaper in all_newsw_sub%}
+        <tr>
+            <td>{{weekly_newspaper[0]}}</td>
+            <td>{{weekly_newspaper[1]}}</td>
+            <td>{{weekly_newspaper[2]}}</td>
+			<td>Weekly</td>
+			<td>{{weekly_newspaper[3]}}</td>
+			<td>${{weekly_newspaper[4]|float }}</td>
+			<td>{{weekly_newspaper[5]}}</td>
+            <td>${{weekly_newspaper[6]|float }}</td>
+        </tr>
+        {%endfor%}
+    </table>
+</body>
+</html>
