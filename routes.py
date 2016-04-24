@@ -101,13 +101,14 @@ def add_weekly_newspaper():
     if request.method == 'GET':
         return render_template('add_weekly_newspaper.html')
     elif request.method == 'POST':
+        button_value = request.form.get("submit", "None provided")
         weekly_newspaper_name = str(request.form['weekly_newspaper_name'])
         weekly_newspaper_frequency = str(request.form['weekly_newspaper_frequency'])
         weekly_newspaper_editor_name = str(request.form['weekly_newspaper_editor'])
         weekly_newspaper_state_name = str(request.form['weekly_newspaper_state_name'])
         weekly_newspaper_rate = int(request.form['weekly_newspaper_rate'])
         cur = db.cursor()
-        if request.form['submit'] == 'Submit':
+        if button_value == 'submit':
             try:
                 add_weekly_magazine = "INSERT INTO NEWSPAPER_WEEKLY (pn_name , editor_nw_name) VALUES (%s, %s)"
                 data_weekly_newspaper = (weekly_newspaper_name, weekly_newspaper_editor_name)
@@ -118,16 +119,17 @@ def add_weekly_newspaper():
             data_weekly_newspaper_rate = (weekly_newspaper_name, weekly_newspaper_state_name, weekly_newspaper_rate)
             cur.execute(add_weekly_newspaper_rate, data_weekly_newspaper_rate)
             db.commit()
-            # print weekly_newspaper_name, weekly_newspaper_state_name, weekly_newspaper_rate
             return redirect(url_for('index'))
-        '''
-        else:
-            query = "UPDATE MAGAZINE SET frequency %s, editorm_name %s WHERE pm_name = %s"
-            query_data = (magazine_frequency, magazine_editor_name, magazine_name)
+        elif button_value == 'update':
+            query = "UPDATE NEWSPAPER_WEEKLY SET editor_nw_name = %s WHERE pn_name = %s;"
+            query_data = (weekly_newspaper_editor_name, weekly_newspaper_name)
             cur.execute(query, query_data)
             db.commit()
-            return render_template('add_magazine.html')
-        '''
+            query = "UPDATE weekly_newspaper_rate SET rate = %s  WHERE wnr_name = %s and state = %s;"
+            query_data = (weekly_newspaper_rate, weekly_newspaper_name, weekly_newspaper_state_name)
+            cur.execute(query, query_data)
+            db.commit()
+            return render_template('add_weekly_newspaper.html')
 #Gaurav Kolekar
 
 #Gaurav Kolekar
@@ -153,7 +155,7 @@ def daily_newspapers():
         for row in data:
             all_newspapers_d.append(list(row))
         return render_template('daily_newspapers.html', all_newspapers_d = all_newspapers_d)
-		
+
 @app.route('/all_magazines_sub', methods =['GET'])
 def all_magazines_sub():
     if request.method == 'GET':
