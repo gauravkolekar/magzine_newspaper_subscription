@@ -70,4 +70,16 @@ INSERT INTO sub_newspaper_weekly(id_no, pnw_name, state, no_of_issues, start_dat
 values (5, "Weekly News","Alaska",1, current_date(), '2017-05-19','2017-05-19',1,10500);
 
 INSERT INTO sub_newspaper_weekly(id_no, pnw_name, state, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost)
-values (6, "NewsWeekly","Alabama",1, current_date(), '2017-05-19','2017-05-19',1,5500);  
+values (6, "NewsWeekly","Alabama",1, current_date(), '2017-05-19','2017-05-19',1,5500); 
+
+select c1.cname Customer_Name, c1.address Customer_Address, s1.pm_name Publication_Name, m1.frequency Frequency, m2.state, m2.rate, s1.end_date End_Date, s1.cost 
+from customer c1, sub_magazine s1, magazine m1, magazine_subscription_rate m2
+ where s1.id_no = c1.id_no and s1.pm_name = m2.pm_name and s1.state = m2.state and m1.pm_name = m2.pm_name;
+
+select c1.cname Customer_Name, c1.address Customer_Address, s1.pnd_name Publication_Name, s1.sub_type Subscription_Type, m2.state, m2.rate, s1.end_date End_Date, s1.cost 
+from customer c1, sub_newspaper_daily s1, newspaper_daily m1, daily_newspaper_rate m2 
+where s1.id_no = c1.id_no and s1.pnd_name = m2.dnr_name and s1.state = m2.state and m1.pn_name = m2.dnr_name; 
+
+select c1.cname Customer_Name, c1.address Customer_Address, s1.pnw_name Publication_Name, s1.state, m2.rate, s1.end_date End_Date, s1.cost 
+from customer c1, sub_newspaper_weekly s1, newspaper_weekly m1, weekly_newspaper_rate m2
+where s1.id_no = c1.id_no and s1.pnw_name = m2.wnr_name and s1.state = m2.state and m1.pn_name = m2.wnr_name;
