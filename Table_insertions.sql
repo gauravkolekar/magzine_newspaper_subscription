@@ -70,4 +70,4 @@ INSERT INTO sub_newspaper_weekly(id_no, pnw_name, state, no_of_issues, start_dat
 values (5, "Weekly News","Alaska",1, current_date(), '2017-05-19','2017-05-19',1,10500);
 
 INSERT INTO sub_newspaper_weekly(id_no, pnw_name, state, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost)
-values (6, "NewsWeekly","Alabama",1, current_date(), '2017-05-19','2017-05-19',1,5500);
+values (6, "NewsWeekly","Alabama",1, current_date(), '2017-05-19','2017-05-19',1,5500);  
