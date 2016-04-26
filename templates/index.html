@@ -2,16 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
+    <script src="{{url_for('static',filename='jquery-1.12.3.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
     <title>Homepage</title>
 </head>
 <body>
-    <p>Hello this website use MYSQL version {{sqlversion}}</p>
-    <form action="{{url_for('index')}}" method="post">
-        Name:<br>
-        <input type="text" name="name" placeholder="Enter full name"><br>
-        Address:<br>
-        <textarea rows="4" cols="50" name="address" placeholder="Enter address"></textarea><br>
-        <input type="submit" name="submit" value="Submit">
-    </form>
+    {% include 'navbar.html' %}
+
+
+    <div class="container">
+        <p>Hello this website use MYSQL version {{sqlversion}}</p>
+        <div class="">
+            <form role="form" action="{{url_for('index')}}" method="post">
+                <div class="form-group">
+                    <label>Name:</label><br>
+                    <input type="text" name="name" placeholder="Enter full name"><br>
+                </div>
+
+                <div class="form-group">
+                    <label>Address:</label><br>
+                    <textarea rows="4" cols="50" name="address" placeholder="Enter address"></textarea><br>
+                </div>
+                <input class="btn btn-default" type="submit" name="submit" value="Submit">
+            </form>
+        </div>
+    </div> <!-- end of container -->
 </body>
 </html>
