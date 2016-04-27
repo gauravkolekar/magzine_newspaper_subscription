@@ -2,9 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
+    <script src="{{url_for('static',filename='jquery-1.12.3.min.js')}}"></script>
+    <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
     <title>Subscriptions</title>
 </head>
 <body>
+	{% include 'navbar.html' %}
     <a href="{{url_for('magazines')}}">Magazines</a><br>
     <a href="{{url_for('daily_newspapers')}}">Daily Newspapers</a><br>
     <a href="{{url_for('weekly_newspapers')}}">Weekly Newspapers</a><br>
