@@ -22,6 +22,11 @@
             <button type="submit" name="submit" value="update">Update</button>
         </form>
         <p>Link to get all customer and their subscription for magazine: <a href="{{url_for('all_magazines_sub')}}">Click here!</a></p>
+		{% if error_msg is not none %}
+        <p style="margin-top: 20px" class="alert alert-danger" role="alert">
+            {{error_msg}}
+        </p>
+        {%endif %}
     </div>
 </body>
 </html>
