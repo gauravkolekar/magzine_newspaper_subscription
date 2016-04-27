@@ -6,21 +6,23 @@
     <title>Add Weekly Newspaper</title>
 </head>
 <body>
-    <form action="{{url_for('add_weekly_newspaper')}}" method="post">
-        Newspaper Name:<br>
-        <input type="text" name="weekly_newspaper_name" placeholder="Enter newspaper name"><br>
-        Newspaper Frequency:<br>
-        <input type="text" name="weekly_newspaper_frequency" value="Weekly" readonly><br>
-        Editor of the Newspaper:<br>
-        <input type="text" name="weekly_newspaper_editor" placeholder="Enter editor's name"><br>
-		State:<br>
-        <input type="text" name="weekly_newspaper_state_name" placeholder="Enter state"><br>
-		Rate:<br>
-        <input type="text" name="weekly_newspaper_rate" placeholder="Enter state's rate"><br>
-        <button type="submit" name ="submit" value="submit">Submit</button>
-        <button type="submit" name="submit" value="update">Update</button>
-    </form>
-    <p>Link to get all customer and their subscription for weekly newspaper: <a href="{{url_for('all_newsw_sub')}}">Click here!</a></p>
-
+    {%include navbar.html%}
+    <div class="container">
+        <form action="{{url_for('add_weekly_newspaper')}}" method="post">
+            Newspaper Name:<br>
+            <input type="text" name="weekly_newspaper_name" placeholder="Enter newspaper name"><br>
+            Newspaper Frequency:<br>
+            <input type="text" name="weekly_newspaper_frequency" value="Weekly" readonly><br>
+            Editor of the Newspaper:<br>
+            <input type="text" name="weekly_newspaper_editor" placeholder="Enter editor's name"><br>
+            State:<br>
+            <input type="text" name="weekly_newspaper_state_name" placeholder="Enter state"><br>
+            Rate:<br>
+            <input type="text" name="weekly_newspaper_rate" placeholder="Enter state's rate"><br>
+            <button type="submit" name ="submit" value="submit">Submit</button>
+            <button type="submit" name="submit" value="update">Update</button>
+        </form>
+        <p>Link to get all customer and their subscription for weekly newspaper: <a href="{{url_for('all_newsw_sub')}}">Click here!</a></p>
+    </div>
 </body>
 </html>
