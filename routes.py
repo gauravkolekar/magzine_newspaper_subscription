@@ -76,7 +76,7 @@ def add_magazine():
                 return render_template('add_magazine.html')
         except:
             add_magazine_error = 'Something Went Wrong. Please Check your inputs.'
-            return render_template('add_magazine.html', error_msg=add_magazine_error)
+            return render_template('add_magazine.html', error_msg=add_magazine_error) 
 #Gaurav Kolekar
 
 @app.route('/add_daily_newspaper', methods=['GET','POST'])
