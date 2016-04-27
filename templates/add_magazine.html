@@ -21,5 +21,10 @@
     </form>
     <p>Link to get all customer and their subscription for magazine</p>
     <a href="{{url_for('all_magazines_sub')}}"> Click here!</a>
+	{% if error_msg is not none %}
+		<p>
+            {{error_msg}}
+        </p>
+    {%endif %}
 </body>
 </html>
