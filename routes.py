@@ -208,11 +208,20 @@ def magazine_subscription():
         print "frequency is: ",frequency,"and rate is:", rate
         act_freq = (magazine_end_date - magazine_start_date).days
         if frequency == 'Weekly':
-            cost = (act_freq/7) * rate * magazine_number_of_issues
+            number_of_weeks = (act_freq/7)
+            if number_of_weeks == 0:
+                number_of_weeks = 1
+            cost =  number_of_weeks * rate * magazine_number_of_issues
         elif frequency == 'Monthly':
-            cost = (act_freq/30) * rate * magazine_number_of_issues	
+            number_of_months = (act_freq/30)
+            if number_of_months == 0:
+                number_of_months = 1
+            cost =  number_of_months * rate * magazine_number_of_issues	
         elif frequency == 'Yearly':
-            cost = (act_freq/365) * rate * magazine_number_of_issues	
+            number_of_years = (act_freq/365)
+            if number_of_years == 0:
+                number_of_years = 1
+            cost =  number_of_years * rate * magazine_number_of_issues	
         print "List of values: ",cust_id, magazine_number_of_issues, magazine_start_date, magazine_end_date, state
         print "Actual cost: ",cost
         add_customer_sub = "INSERT INTO sub_magazine (id_no, pm_name, state, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s,%s)"
