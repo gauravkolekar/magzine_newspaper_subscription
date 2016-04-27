@@ -228,6 +228,7 @@ def magazine_subscription():
         data_customer_sub = (cust_id, name, state, magazine_number_of_issues, magazine_start_date, magazine_end_date, magazine_end_date, 1, cost)
         cur.execute(add_customer_sub, data_customer_sub)
         db.commit()
+        cur.callproc('Active_flag_handle')
         return redirect(url_for('subscription'))
 
 @app.route('/daily_newspaper_subscription', methods=['GET','POST'])
