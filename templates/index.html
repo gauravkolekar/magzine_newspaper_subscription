@@ -14,21 +14,27 @@
 
 
     <div class="container">
-        <p>Hello this website use MYSQL version {{sqlversion}}</p>
-        <div class="">
-            <form role="form" action="{{url_for('index')}}" method="post">
-                <div class="form-group">
-                    <label>Name:</label><br>
-                    <input type="text" name="name" placeholder="Enter full name"><br>
-                </div>
+        <p>Hello and welcome to Newspaper & Magazine Subsciption</p>
 
-                <div class="form-group">
-                    <label>Address:</label><br>
-                    <textarea rows="4" cols="50" name="address" placeholder="Enter address"></textarea><br>
-                </div>
-                <input class="btn btn-default" type="submit" name="submit" value="Submit">
-            </form>
-        </div>
+        <form role="form" action="{{url_for('index')}}" method="post">
+            <div class="form-group">
+                <label>Name:</label><br>
+                <input type="text" name="name" placeholder="Enter full name"><br>
+            </div>
+
+            <div class="form-group">
+                <label>Address:</label><br>
+                <textarea rows="4" cols="50" name="address" placeholder="Enter address"></textarea><br>
+            </div>
+            <input class="btn btn-default" type="submit" name="submit" value="Submit">
+        </form>
+
+        {% if error_msg is not none %}
+        <p class="alert alert-danger" role="alert">
+            {{error_msg}}
+        </p>
+        {%endif %}
+
     </div> <!-- end of container -->
 </body>
 </html>

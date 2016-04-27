@@ -7,15 +7,18 @@ from datetime import datetime, date
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+    index_error = None
     if request.method == 'GET':
-        cur = db.cursor()
-        cur.execute("SELECT VERSION();")
-        data = str(cur.fetchone())
-        #db.close()
-        return render_template('index.html', sqlversion=data)
+        #cur = db.cursor()
+        #cur.execute("SELECT VERSION();")
+        #data = str(cur.fetchone())
+        return render_template('index.html', error_msg=index_error)
     elif request.method == 'POST':
         user_name = str(request.form['name'])
         user_address = str(request.form['address'])
+        if user_name == '' or user_address == '':
+            index_error = 'Invalid Name or Address'
+            return render_template('index.html', error_msg=index_error)
         cur = db.cursor()
         session['sub_username'] = user_name
         try:
