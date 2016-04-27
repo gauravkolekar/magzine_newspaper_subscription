@@ -40,8 +40,9 @@ def subscription():
 #Gaurav Kolekar
 @app.route('/add_magazine', methods=['GET','POST'])
 def add_magazine():
+    add_magazine_error = None
     if request.method == 'GET':
-        return render_template('add_magazine.html')
+        return render_template('add_magazine.html', error_msg=add_magazine_error) 
     elif request.method == 'POST':
         try:
             button_value = request.form.get("submit", "None provided")
