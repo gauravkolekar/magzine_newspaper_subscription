@@ -274,6 +274,7 @@ def daily_newspaper_subscription():
         data_customer_newsd_sub = (cust_id, name, state, newsd_number_of_issues, sub_type, newsd_start_date, newsd_end_date, newsd_end_date, 1, cost)
         cur.execute(add_customer_newsd_sub, data_customer_newsd_sub)
         db.commit()
+        cur.callproc('Active_flag_handle_newsd')
         return redirect(url_for('subscription'))
 
 #Gaurav Kolekar
