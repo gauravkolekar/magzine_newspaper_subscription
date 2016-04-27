@@ -333,7 +333,7 @@ def all_magazines_sub():
 def all_newsd_sub():
     if request.method == 'GET':
         cur = db.cursor()
-        cur.execute("select c1.cname, c1.address, s1.pnd_name, s1.sub_type, m2.state, m2.rate, s1.end_date, s1.cost from customer c1, sub_newspaper_daily s1, newspaper_daily m1, daily_newspaper_rate m2 where s1.id_no = c1.id_no and s1.pnd_name = m2.dnr_name and s1.state = m2.state and m1.pn_name = m2.dnr_name;")
+        cur.execute("select c1.cname, c1.address, s1.pnd_name, s1.sub_type, m2.state, m2.rate, s1.no_of_issues, s1.end_date, s1.active_flag, s1.cost from customer c1, sub_newspaper_daily s1, newspaper_daily m1, daily_newspaper_rate m2 where s1.id_no = c1.id_no and s1.pnd_name = m2.dnr_name and s1.state = m2.state and m1.pn_name = m2.dnr_name;")
         data = list(cur.fetchall())
         all_newsd_sub = list()
         for row in data:
@@ -344,6 +344,10 @@ def all_newsd_sub():
                 lst[3] = "Monday to Sunday"
             elif lst[3] == 2:
                 lst[3] = "Saturday and Sunday"
+            if lst[8] == 1:
+                lst[8] = 'Active'
+            else:
+                lst[8] = 'Inactive'
             all_newsd_sub.append(lst)
         return render_template('all_newsd_sub.html', all_newsd_sub = all_newsd_sub)	
 
