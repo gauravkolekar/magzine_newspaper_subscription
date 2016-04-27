@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect, session
 from runserver import app
-from database_configuration import database_configuration as db
-#from db_config import database_configuration as db
+#from database_configuration import database_configuration as db
+from db_config import database_configuration as db
 from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
@@ -25,7 +25,7 @@ def index():
             db.commit()
         except:
             pass	
-        #print user_name, user_address
+        print "Here: ",user_name, user_address
         if request.form['submit'] == 'Submit':
             return redirect(url_for('subscription'))
 
