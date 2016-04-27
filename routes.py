@@ -256,6 +256,8 @@ def daily_newspaper_subscription():
         rate = float(rate)
         act_freq = (newsd_end_date - newsd_start_date).days
         act_freq = act_freq / 7
+        if act_freq == 0:
+            act_freq = 1
         cost = sub_type * act_freq * newsd_number_of_issues * rate
         print "List of values: ",cust_id, newsd_number_of_issues, newsd_start_date, newsd_end_date
         print "Actual cost: ",cost
@@ -291,7 +293,10 @@ def weekly_newspaper_subscription():
         weekly_newspaper_state = str(weekly_newspaper_state)
         rate = float(weekly_magazine_rate)
         act_freq = (weekly_newspaper_end_date - weekly_newspaper_start_date).days
-        cost = (act_freq / 7) * rate * weekly_newspaper_number_of_issues
+        act_freq = (act_freq / 7)
+        if act_freq == 0:
+            act_freq = 1
+        cost = act_freq * rate * weekly_newspaper_number_of_issues
         query_weekly_newspaper_sub = "INSERT INTO sub_newspaper_weekly (id_no, pnw_name, state, no_of_issues, start_date, end_date, actual_end_date, active_flag, cost ) values (%s, %s, %s, %s, %s,%s,%s,%s,%s)"
         data_weekly_newspaper_sub = (cust_id, weekly_newspaper_name, weekly_newspaper_state, weekly_newspaper_number_of_issues, weekly_newspaper_start_date, weekly_newspaper_end_date,weekly_newspaper_end_date, 1, cost)
         cur.execute(query_weekly_newspaper_sub, data_weekly_newspaper_sub)
@@ -303,11 +308,16 @@ def weekly_newspaper_subscription():
 def all_magazines_sub():
     if request.method == 'GET':
         cur = db.cursor()
-        cur.execute("select c1.cname, c1.address, s1.pm_name, m1.frequency, m2.state, m2.rate, s1.end_date, s1.cost from customer c1, sub_magazine s1, magazine m1, magazine_subscription_rate m2 where s1.id_no = c1.id_no and s1.pm_name = m2.pm_name and s1.state = m2.state and m1.pm_name = m2.pm_name;")
+        cur.execute("select c1.cname, c1.address, s1.pm_name, m1.frequency, m2.state, m2.rate, s1.no_of_issues, s1.end_date, s1.active_flag, s1.cost from customer c1, sub_magazine s1, magazine m1, magazine_subscription_rate m2 where s1.id_no = c1.id_no and s1.pm_name = m2.pm_name and s1.state = m2.state and m1.pm_name = m2.pm_name;")
         data = list(cur.fetchall())
         all_mag_sub = list()
         for row in data:
-            all_mag_sub.append(list(row))
+            lst = list(row)
+            if lst[8] == 1:
+                lst[8] = 'Active'
+            else:
+                lst[8] = 'Inactive'
+            all_mag_sub.append(lst)
         return render_template('all_magazines_sub.html', all_mag_sub = all_mag_sub)
 
 @app.route('/all_newsd_sub', methods =['GET'])
