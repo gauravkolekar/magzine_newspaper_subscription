@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect, session
 from runserver import app
-#from database_configuration import database_configuration as db
-from db_config import database_configuration as db
+from database_configuration import database_configuration as db
+#from db_config import database_configuration as db
 from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
@@ -12,6 +12,7 @@ def index():
         #cur = db.cursor()
         #cur.execute("SELECT VERSION();")
         #data = str(cur.fetchone())
+        #print data
         return render_template('index.html', error_msg=index_error)
     elif request.method == 'POST':
         user_name = str(request.form['name'])
