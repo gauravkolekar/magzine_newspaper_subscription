@@ -14,7 +14,9 @@
             <th>Magazine Frequency</th>
             <th>Magazine distribution state</th>
             <th>Magazine Rate</th>
+			<th>Number of Issues</th>
             <th>Subscription End Date</th>
+			<th>Customer Status</th>
 			<th>Subscription Cost</th>
         </tr>
         {%for magazine in all_mag_sub%}
@@ -26,7 +28,9 @@
 			<td>{{magazine[4]}}</td>
 			<td>${{magazine[5]|float }}</td>
 			<td>{{magazine[6]}}</td>
-            <td>${{magazine[7]|float }}</td>
+			<td>{{magazine[7]}}</td>
+			<td>{{magazine[8]}}</td>
+            <td>${{magazine[9]|float }}</td>
         </tr>
         {%endfor%}
     </table>
