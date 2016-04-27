@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect, session
 from runserver import app
-from database_configuration import database_configuration as db
-#from db_config import database_configuration as db
+#from database_configuration import database_configuration as db
+from db_config import database_configuration as db
 from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
@@ -16,8 +16,6 @@ def index():
         return render_template('index.html', error_msg=index_error)
     elif request.method == 'POST':
         user_name = str(request.form['name'])
-        if user_name == "":
-            username = 'Stupid'
         user_address = str(request.form['address'])
         if user_name == '' or user_address == '':
             index_error = 'Invalid Name or Address'
@@ -45,36 +43,40 @@ def add_magazine():
     if request.method == 'GET':
         return render_template('add_magazine.html')
     elif request.method == 'POST':
-        button_value = request.form.get("submit", "None provided")
-        magazine_name = str(request.form['magazine_name'])
-        magazine_frequency = str(request.form['magazine_frequency'])
-        magazine_editor_name = str(request.form['magazine_editor'])
-        state_name = str(request.form['state_name'])
-        rate = int(request.form['rate'])
-        cur = db.cursor()
-        if button_value == 'submit':
-           try:
-                add_magazine = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
-                data_magazine = (magazine_name,magazine_frequency,magazine_editor_name)
-                cur.execute(add_magazine,data_magazine)
-           except:
-               pass
-           add_magazine_sub_rate = "INSERT INTO magazine_subscription_rate (pm_name, state, rate) VALUES (%s,%s,%s)"
-           data_magazine_sub_rate = (magazine_name,state_name,rate)
-           cur.execute(add_magazine_sub_rate,data_magazine_sub_rate)
-           db.commit()
-           return redirect(url_for('index'))
-        elif button_value == 'update':
-            print magazine_frequency, magazine_editor_name, magazine_name
-            query = "UPDATE MAGAZINE SET frequency = %s, editorm_name = %s WHERE pm_name = %s;"
-            query_data = (magazine_frequency, magazine_editor_name, magazine_name)
-            cur.execute(query, query_data)
-            db.commit()
-            query = "UPDATE magazine_subscription_rate SET rate = %s  WHERE pm_name = %s and state = %s;"
-            query_data = (rate, magazine_name, state_name)
-            cur.execute(query, query_data)
-            db.commit()
-            return render_template('add_magazine.html')
+        try:
+            button_value = request.form.get("submit", "None provided")
+            magazine_name = str(request.form['magazine_name'])
+            magazine_frequency = str(request.form['magazine_frequency'])
+            magazine_editor_name = str(request.form['magazine_editor'])
+            state_name = str(request.form['state_name'])
+            rate = int(request.form['rate'])
+            cur = db.cursor()
+            if button_value == 'submit':
+                try:
+                    add_magazine = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
+                    data_magazine = (magazine_name,magazine_frequency,magazine_editor_name)
+                    cur.execute(add_magazine,data_magazine)
+                except:
+                    pass
+                add_magazine_sub_rate = "INSERT INTO magazine_subscription_rate (pm_name, state, rate) VALUES (%s,%s,%s)"
+                data_magazine_sub_rate = (magazine_name,state_name,rate)
+                cur.execute(add_magazine_sub_rate,data_magazine_sub_rate)
+                db.commit()
+                return redirect(url_for('index'))
+            elif button_value == 'update':
+                print magazine_frequency, magazine_editor_name, magazine_name
+                query = "UPDATE MAGAZINE SET frequency = %s, editorm_name = %s WHERE pm_name = %s;"
+                query_data = (magazine_frequency, magazine_editor_name, magazine_name)
+                cur.execute(query, query_data)
+                db.commit()
+                query = "UPDATE magazine_subscription_rate SET rate = %s  WHERE pm_name = %s and state = %s;"
+                query_data = (rate, magazine_name, state_name)
+                cur.execute(query, query_data)
+                db.commit()
+                return render_template('add_magazine.html')
+        except:
+            add_magazine_error = 'Something Went Wrong. Please Check your inputs.'
+            return render_template('add_magazine.html', error_msg=add_magazine_error)
 #Gaurav Kolekar
 
 @app.route('/add_daily_newspaper', methods=['GET','POST'])
