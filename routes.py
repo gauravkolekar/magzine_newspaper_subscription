@@ -15,6 +15,8 @@ def index():
         return render_template('index.html', sqlversion=data)
     elif request.method == 'POST':
         user_name = str(request.form['name'])
+        if user_name == "":
+            username = 'Stupid'
         user_address = str(request.form['address'])
         cur = db.cursor()
         session['sub_username'] = user_name
