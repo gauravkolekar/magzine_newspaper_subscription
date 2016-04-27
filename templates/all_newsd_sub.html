@@ -14,7 +14,9 @@
             <th>Newspaper Type</th>
             <th>Newspaper distribution state</th>
             <th>Newspaper Rate</th>
+			<th>Number of Issues</th>
             <th>Subscription End Date</th>
+			<th>Customer Subscription Status</th>
 			<th>Subscription Cost</th>
         </tr>
         {%for newsd in all_newsd_sub%}
@@ -26,7 +28,9 @@
 			<td>{{newsd[4]}}</td>
 			<td>${{newsd[5]|float }}</td>
 			<td>{{newsd[6]}}</td>
-            <td>${{newsd[7]|float }}</td>
+			<td>{{newsd[7]}}</td>
+			<td>{{newsd[8]}}</td>
+            <td>${{newsd[9]|float }}</td>
         </tr>
         {%endfor%}
     </table>

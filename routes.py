@@ -1,7 +1,7 @@
 from flask import render_template, request, url_for, redirect, session
 from runserver import app
-from database_configuration import database_configuration as db
-#from db_config import database_configuration as db
+#from database_configuration import database_configuration as db
+from db_config import database_configuration as db
 from datetime import datetime, date
 
 @app.route('/', methods=['GET', 'POST'])
@@ -43,36 +43,40 @@ def add_magazine():
     if request.method == 'GET':
         return render_template('add_magazine.html')
     elif request.method == 'POST':
-        button_value = request.form.get("submit", "None provided")
-        magazine_name = str(request.form['magazine_name'])
-        magazine_frequency = str(request.form['magazine_frequency'])
-        magazine_editor_name = str(request.form['magazine_editor'])
-        state_name = str(request.form['state_name'])
-        rate = int(request.form['rate'])
-        cur = db.cursor()
-        if button_value == 'submit':
-           try:
-                add_magazine = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
-                data_magazine = (magazine_name,magazine_frequency,magazine_editor_name)
-                cur.execute(add_magazine,data_magazine)
-           except:
-               pass
-           add_magazine_sub_rate = "INSERT INTO magazine_subscription_rate (pm_name, state, rate) VALUES (%s,%s,%s)"
-           data_magazine_sub_rate = (magazine_name,state_name,rate)
-           cur.execute(add_magazine_sub_rate,data_magazine_sub_rate)
-           db.commit()
-           return redirect(url_for('index'))
-        elif button_value == 'update':
-            print magazine_frequency, magazine_editor_name, magazine_name
-            query = "UPDATE MAGAZINE SET frequency = %s, editorm_name = %s WHERE pm_name = %s;"
-            query_data = (magazine_frequency, magazine_editor_name, magazine_name)
-            cur.execute(query, query_data)
-            db.commit()
-            query = "UPDATE magazine_subscription_rate SET rate = %s  WHERE pm_name = %s and state = %s;"
-            query_data = (rate, magazine_name, state_name)
-            cur.execute(query, query_data)
-            db.commit()
-            return render_template('add_magazine.html')
+        try:
+            button_value = request.form.get("submit", "None provided")
+            magazine_name = str(request.form['magazine_name'])
+            magazine_frequency = str(request.form['magazine_frequency'])
+            magazine_editor_name = str(request.form['magazine_editor'])
+            state_name = str(request.form['state_name'])
+            rate = int(request.form['rate'])
+            cur = db.cursor()
+            if button_value == 'submit':
+                try:
+                    add_magazine = "INSERT INTO MAGAZINE (pm_name , frequency, editorm_name) VALUES (%s,%s,%s)"
+                    data_magazine = (magazine_name,magazine_frequency,magazine_editor_name)
+                    cur.execute(add_magazine,data_magazine)
+                except:
+                    pass
+                add_magazine_sub_rate = "INSERT INTO magazine_subscription_rate (pm_name, state, rate) VALUES (%s,%s,%s)"
+                data_magazine_sub_rate = (magazine_name,state_name,rate)
+                cur.execute(add_magazine_sub_rate,data_magazine_sub_rate)
+                db.commit()
+                return redirect(url_for('index'))
+            elif button_value == 'update':
+                print magazine_frequency, magazine_editor_name, magazine_name
+                query = "UPDATE MAGAZINE SET frequency = %s, editorm_name = %s WHERE pm_name = %s;"
+                query_data = (magazine_frequency, magazine_editor_name, magazine_name)
+                cur.execute(query, query_data)
+                db.commit()
+                query = "UPDATE magazine_subscription_rate SET rate = %s  WHERE pm_name = %s and state = %s;"
+                query_data = (rate, magazine_name, state_name)
+                cur.execute(query, query_data)
+                db.commit()
+                return render_template('add_magazine.html')
+        except:
+            add_magazine_error = 'Something Went Wrong. Please Check your inputs.'
+            return render_template('add_magazine.html', error_msg=add_magazine_error) 
 #Gaurav Kolekar
 
 @app.route('/add_daily_newspaper', methods=['GET','POST'])
@@ -270,6 +274,7 @@ def daily_newspaper_subscription():
         data_customer_newsd_sub = (cust_id, name, state, newsd_number_of_issues, sub_type, newsd_start_date, newsd_end_date, newsd_end_date, 1, cost)
         cur.execute(add_customer_newsd_sub, data_customer_newsd_sub)
         db.commit()
+        cur.callproc('Active_flag_handle_newsd')
         return redirect(url_for('subscription'))
 
 #Gaurav Kolekar
@@ -329,7 +334,7 @@ def all_magazines_sub():
 def all_newsd_sub():
     if request.method == 'GET':
         cur = db.cursor()
-        cur.execute("select c1.cname, c1.address, s1.pnd_name, s1.sub_type, m2.state, m2.rate, s1.end_date, s1.cost from customer c1, sub_newspaper_daily s1, newspaper_daily m1, daily_newspaper_rate m2 where s1.id_no = c1.id_no and s1.pnd_name = m2.dnr_name and s1.state = m2.state and m1.pn_name = m2.dnr_name;")
+        cur.execute("select c1.cname, c1.address, s1.pnd_name, s1.sub_type, m2.state, m2.rate, s1.no_of_issues, s1.end_date, s1.active_flag, s1.cost from customer c1, sub_newspaper_daily s1, newspaper_daily m1, daily_newspaper_rate m2 where s1.id_no = c1.id_no and s1.pnd_name = m2.dnr_name and s1.state = m2.state and m1.pn_name = m2.dnr_name;")
         data = list(cur.fetchall())
         all_newsd_sub = list()
         for row in data:
@@ -340,6 +345,10 @@ def all_newsd_sub():
                 lst[3] = "Monday to Sunday"
             elif lst[3] == 2:
                 lst[3] = "Saturday and Sunday"
+            if lst[8] == 1:
+                lst[8] = 'Active'
+            else:
+                lst[8] = 'Inactive'
             all_newsd_sub.append(lst)
         return render_template('all_newsd_sub.html', all_newsd_sub = all_newsd_sub)	
 
