@@ -2,41 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {%include 'head_links.html'%}
     <title>Newspaper</title>
 </head>
 <body>
-    <p>Welcome! Please feel free to subscribe</p>
-    <table style="width: 100%">
-        <tr>
-            <th>Newspaper Name</th>
-            <th>Newspaper distribution state</th>
-            <th>Newspaper Rate</th>
-            <th>Subscription Link Monday to Friday</th>
-			<th>Subscription Link Saturday and Sunday</th>
-			<th>Subscription Link Monday to Sunday</th>
-        </tr>
-        {%for newspaper in all_newspapers_d%}
-        <tr>
-            <td>{{newspaper[0]}}</td>
-            <td>{{newspaper[1]}}</td>
-            <td>${{newspaper[2]|float }}</td>
-            <td>
-                <a href="{{url_for('daily_newspaper_subscription',name=newspaper[0],state=newspaper[1],rate=newspaper[2], sub_type = 5)}}">
-                    Subscribe
-                </a>
-			</td>	
-			<td>
-                <a href="{{url_for('daily_newspaper_subscription',name=newspaper[0],state=newspaper[1],rate=newspaper[2], sub_type = 2)}}">
-                    Subscribe
-                </a>
-			</td>
-			<td>
-                <a href="{{url_for('daily_newspaper_subscription',name=newspaper[0],state=newspaper[1],rate=newspaper[2], sub_type = 7)}}">
-                    Subscribe
-                </a>
-			</td>
-        </tr>
-        {%endfor%}
-    </table>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <p style="margin-bottom: 20px">Welcome! Please feel free to subscribe</p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Newspaper Name</th>
+                    <th>Newspaper distribution state</th>
+                    <th>Newspaper Rate</th>
+                    <th>Subscription Link Monday to Friday</th>
+                    <th>Subscription Link Saturday and Sunday</th>
+                    <th>Subscription Link Monday to Sunday</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for newspaper in all_newspapers_d%}
+                <tr>
+                    <td>{{newspaper[0]}}</td>
+                    <td>{{newspaper[1]}}</td>
+                    <td>${{newspaper[2]|float }}</td>
+                    <td>
+                        <a href="{{url_for('daily_newspaper_subscription',name=newspaper[0],state=newspaper[1],rate=newspaper[2], sub_type = 5)}}">
+                            Subscribe
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{url_for('daily_newspaper_subscription',name=newspaper[0],state=newspaper[1],rate=newspaper[2], sub_type = 2)}}">
+                            Subscribe
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{url_for('daily_newspaper_subscription',name=newspaper[0],state=newspaper[1],rate=newspaper[2], sub_type = 7)}}">
+                            Subscribe
+                        </a>
+                    </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

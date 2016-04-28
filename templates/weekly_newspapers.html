@@ -2,31 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {%include 'head_links.html'%}
     <title>Weekly Newspapers</title>
 </head>
 <body>
-    <p>Welcome! Please feel free to subscribe</p>
-    <table style="width: 100%">
-        <tr>
-            <th>Newspaper Name</th>
-            <th>Newspaper Frequency</th>
-            <th>Newspaper distribution state</th>
-            <th>Newspaper Rate</th>
-            <th>Subscription Link</th>
-        </tr>
-        {%for weekly_newspaper in all_weekly_newspaper%}
-        <tr>
-            <td>{{weekly_newspaper[0]}}</td>
-            <td>Weekly</td>
-            <td>{{weekly_newspaper[1]}}</td>
-            <td>${{weekly_newspaper[2]|float }}</td>
-            <td>
-                <a href="{{url_for('weekly_newspaper_subscription',weekly_newspaper_name=weekly_newspaper[0],weekly_newspaper_state=weekly_newspaper[1],weekly_magazine_rate=weekly_newspaper[2])}}">
-                    Subscribe
-                </a>
-            </td>
-        </tr>
-        {%endfor%}
-    </table>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <p style="margin-bottom: 20px">Welcome! Please feel free to subscribe</p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Newspaper Name</th>
+                    <th>Newspaper Frequency</th>
+                    <th>Newspaper distribution state</th>
+                    <th>Newspaper Rate</th>
+                    <th>Subscription Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for weekly_newspaper in all_weekly_newspaper%}
+                <tr>
+                    <td>{{weekly_newspaper[0]}}</td>
+                    <td>Weekly</td>
+                    <td>{{weekly_newspaper[1]}}</td>
+                    <td>${{weekly_newspaper[2]|float }}</td>
+                    <td>
+                        <a href="{{url_for('weekly_newspaper_subscription',weekly_newspaper_name=weekly_newspaper[0],weekly_newspaper_state=weekly_newspaper[1],weekly_magazine_rate=weekly_newspaper[2])}}">
+                            Subscribe
+                        </a>
+                    </td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
