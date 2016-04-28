@@ -251,8 +251,9 @@ def daily_newspaper_subscription():
     state = request.args.get('state')
     rate = request.args.get('rate')
     print "Initial values: ",type(sub_type), sub_type, type(rate), rate
+    newsd_sub_error = None
     if request.method == 'GET':
-        return render_template('daily_newspaper_subscription.html', newsd_name=name, newsd_sub_type=sub_type, newsd_state=state, newsd_rate=rate)
+        return render_template('daily_newspaper_subscription.html', newsd_name=name, newsd_sub_type=sub_type, newsd_state=state, newsd_rate=rate, error_msg = newsd_sub_error)
     elif request.method == 'POST':
         cur = db.cursor()
         my_var = session.get('sub_username', None)
@@ -265,6 +266,9 @@ def daily_newspaper_subscription():
         newsd_end_date = request.form['end_date_newspaperd']
         newsd_start_date = datetime.strptime(newsd_start_date, '%Y-%m-%d')
         newsd_end_date = datetime.strptime(newsd_end_date, '%Y-%m-%d')
+        if newsd_end_date < newsd_start_date:
+            newsd_sub_error = 'End date has to be in future. Thank you for your patience.'
+            return render_template('daily_newspaper_subscription.html', newsd_name=name, newsd_sub_type=sub_type, newsd_state=state, newsd_rate=rate, error_msg = newsd_sub_error)
         sub_type = int(sub_type)
         rate = float(rate)
         act_freq = (newsd_end_date - newsd_start_date).days
@@ -289,8 +293,9 @@ def weekly_newspaper_subscription():
     weekly_newspaper_frequency = 'Weekly'
     weekly_newspaper_state = request.args.get('weekly_newspaper_state')
     weekly_magazine_rate = request.args.get('weekly_magazine_rate')
+    newsw_sub_error = None
     if request.method == 'GET':
-        return render_template('weekly_newspaper_subscription.html', wnp_name=weekly_newspaper_name, wnp_state=weekly_newspaper_state, wnp_rate=weekly_magazine_rate)
+        return render_template('weekly_newspaper_subscription.html', wnp_name=weekly_newspaper_name, wnp_state=weekly_newspaper_state, wnp_rate=weekly_magazine_rate, error_msg = newsw_sub_error)
     elif request.method == 'POST':
         cur = db.cursor()
         my_var = session.get('sub_username', None)
@@ -303,6 +308,9 @@ def weekly_newspaper_subscription():
         weekly_newspaper_end_date = request.form['end_date_weekly_newspaper']
         weekly_newspaper_start_date = datetime.strptime(weekly_newspaper_start_date, '%Y-%m-%d')
         weekly_newspaper_end_date = datetime.strptime(weekly_newspaper_end_date, '%Y-%m-%d')
+        if weekly_newspaper_end_date < weekly_newspaper_start_date:
+            newsw_sub_error = 'End date has to be in future. Thank you for your patience.'
+            return render_template('weekly_newspaper_subscription.html', wnp_name=weekly_newspaper_name, wnp_state=weekly_newspaper_state, wnp_rate=weekly_magazine_rate, error_msg = newsw_sub_error)
         frequency = str(weekly_newspaper_frequency)
         weekly_newspaper_state = str(weekly_newspaper_state)
         rate = float(weekly_magazine_rate)
@@ -315,6 +323,7 @@ def weekly_newspaper_subscription():
         data_weekly_newspaper_sub = (cust_id, weekly_newspaper_name, weekly_newspaper_state, weekly_newspaper_number_of_issues, weekly_newspaper_start_date, weekly_newspaper_end_date,weekly_newspaper_end_date, 1, cost)
         cur.execute(query_weekly_newspaper_sub, data_weekly_newspaper_sub)
         db.commit()
+        cur.callproc('Active_flag_handle_newsw')
         return redirect(url_for('subscription'))
 #Gaurav Kolekar
 
@@ -360,9 +369,14 @@ def all_newsd_sub():
 def all_newsw_sub():
     if request.method == 'GET':
         cur = db.cursor()
-        cur.execute("select c1.cname, c1.address, s1.pnw_name, s1.state, m2.rate, s1.end_date, s1.cost from customer c1, sub_newspaper_weekly s1, newspaper_weekly m1, weekly_newspaper_rate m2 where s1.id_no = c1.id_no and s1.pnw_name = m2.wnr_name and s1.state = m2.state and m1.pn_name = m2.wnr_name;")
+        cur.execute("select c1.cname, c1.address, s1.pnw_name, s1.state, m2.rate, s1.no_of_issues, s1.end_date, s1.active_flag, s1.cost from customer c1, sub_newspaper_weekly s1, newspaper_weekly m1, weekly_newspaper_rate m2 where s1.id_no = c1.id_no and s1.pnw_name = m2.wnr_name and s1.state = m2.state and m1.pn_name = m2.wnr_name;")
         data = list(cur.fetchall())
         all_newsw_sub = list()
         for row in data:
-            all_newsw_sub.append(list(row))
+            lst = list(row)
+            all_newsw_sub.append(lst)
+            if lst[7] == 1:
+                lst[7] = 'Active'
+            else:
+                lst[7] = 'Inactive'
         return render_template('all_newsw_sub.html', all_newsw_sub = all_newsw_sub)		
