@@ -196,9 +196,9 @@ def magazine_subscription():
     frequency = request.args.get('freq')
     state = request.args.get('state')
     rate = request.args.get('rate')
-    #print "Initial values: ",type(frequency), frequency, type(rate), rate
+    mag_sub_error = None
     if request.method == 'GET':
-        return render_template('magazine_subscription.html', mag_name=name, mag_frequency=frequency, mag_state=state, mag_rate=rate)
+        return render_template('magazine_subscription.html', mag_name=name, mag_frequency=frequency, mag_state=state, mag_rate=rate, error_msg = mag_sub_error)
     elif request.method == 'POST':
         print type(frequency), frequency, type(rate), rate
         cur = db.cursor()
@@ -212,6 +212,9 @@ def magazine_subscription():
         magazine_end_date = request.form['end_date_magazine']
         magazine_start_date = datetime.strptime(magazine_start_date, '%Y-%m-%d')
         magazine_end_date = datetime.strptime(magazine_end_date, '%Y-%m-%d')
+        if magazine_end_date < magazine_start_date:
+            mag_sub_error = 'End date has to be in future. Thank you for your patience.'
+            return render_template('magazine_subscription.html', mag_name=name, mag_frequency=frequency, mag_state=state, mag_rate=rate, error_msg = mag_sub_error)
         frequency = str(frequency)
         rate = float(rate)
         print "frequency is: ",frequency,"and rate is:", rate
