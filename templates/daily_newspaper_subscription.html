@@ -2,26 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {%include 'head_links.html'%}
     <title>Daily Newspaper Subscription</title>
 </head>
 <body>
+    {% include 'navbar.html' %}
+    <div class="container">
     <p>Name:{{newsd_name}}</p>
     <p>Frequency:{{newsd_sub_type}}</p>
     <p>State:{{newsd_state}}</p>
     <p>Rate:${{newsd_rate|float}}</p>
     <form action="{{url_for('daily_newspaper_subscription',name=newsd_name,state=newsd_state,rate=newsd_rate,sub_type=newsd_sub_type)}}" method="post">
-        No of Issues:<br>
-        <input type="number" name="number_of_issues_newspaperd" placeholder="enter required issues"><br>
-        Start Date:<br>
-        <input type="date" name="start_date_newspaperd" placeholder="enter start date for subscription"><br>
-        End Date:<br>
-        <input type="date" name="end_date_newspaperd" placeholder="enter end date for subscription"><br>
-        <input type="submit" name="submit" value="Submit">
+        <div class="form-group">
+            <label>No of Issues:</label><br>
+            <input type="number" name="number_of_issues_newspaperd" placeholder="enter required issues"><br>
+        </div>
+
+        <div class="form-group">
+            <label>Start Date:</label><br>
+            <input type="date" name="start_date_newspaperd" placeholder="enter start date for subscription"><br>
+        </div>
+
+        <div class="form-group">
+            <label>End Date:</label><br>
+            <input type="date" name="end_date_newspaperd" placeholder="enter end date for subscription"><br>
+        </div>
+
+        <input class="btn btn-primary" type="submit" name="submit" value="Submit">
     </form>
 	{% if error_msg is not none %}
         <p style="margin-top: 20px" class="alert alert-danger" role="alert">
             {{error_msg}} 
         </p>
         {%endif %}
+    </div>
 </body>
 </html>
