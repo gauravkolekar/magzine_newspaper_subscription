@@ -14,7 +14,9 @@
             <th>Weekly Newspaper Frequency</th>
             <th>Weekly Newspaper distribution state</th>
             <th>Weekly Newspaper Rate</th>
+			<th>Number of Issues</th>
             <th>Subscription End Date</th>
+			<th>Subscription Status</th>
 			<th>Subscription Cost</th>
         </tr>
         {%for weekly_newspaper in all_newsw_sub%}
@@ -26,7 +28,9 @@
 			<td>{{weekly_newspaper[3]}}</td>
 			<td>${{weekly_newspaper[4]|float }}</td>
 			<td>{{weekly_newspaper[5]}}</td>
-            <td>${{weekly_newspaper[6]|float }}</td>
+			<td>{{weekly_newspaper[6]}}</td>
+			<td>{{weekly_newspaper[7]}}</td>
+            <td>${{weekly_newspaper[8]|float }}</td>
         </tr>
         {%endfor%}
     </table>
