@@ -6,19 +6,34 @@
     <title>Add Daily Newspaper</title>
 </head>
 <body>
-    <form action="{{url_for('add_daily_newspaper')}}" method="post">
-        Newspaper Name:<br>
-        <input type="text" name="newspaper_name" placeholder="Enter Newspaper name"><br>
-        Editor of the newspaper:<br>
-        <input type="text" name="newspaper_editor" placeholder="Enter the editor's name"><br>
-		State:<br>
-        <input type="text" name="state_name" placeholder="Enter state "><br>
-		Rate:<br>
-        <input type="text" name="rate" placeholder="Enter State's rate"><br>
-        <button type="submit" name ="submit" value="submit">Submit</button>
-        <button type="submit" name="submit" value="update">Update</button>
-    </form>
-    <p>Link to get all customer and their subscription for daily newspaper</p>
-    <a href="{{url_for('all_newsd_sub')}}"> Click here!</a>
+    {%include 'navbar.html'%}
+    <div class="container">
+        <form action="{{url_for('add_daily_newspaper')}}" method="post">
+            <div class="form-group">
+                <label>Newspaper Name:</label><br>
+                <input type="text" name="newspaper_name" placeholder="Enter Newspaper name"><br>
+            </div>
+
+            <div class="form-group">
+                <label>Editor of the newspaper:</label><br>
+                <input type="text" name="newspaper_editor" placeholder="Enter the editor's name"><br>
+            </div>
+
+            <div class="form-group">
+                <label>State:</label><br>
+                <input type="text" name="state_name" placeholder="Enter state "><br>
+            </div>
+
+            <div class="form-group">
+                <label>Rate:</label><br>
+                <input type="text" name="rate" placeholder="Enter State's rate"><br>
+            </div>
+
+            <button class="btn btn-default btn-primary" type="submit" name ="submit" value="submit">Submit</button>
+            <button class="btn btn-default btn-primary" type="submit" name="submit" value="update">Update</button>
+        </form>
+        <p>Link to get all customer and their subscription for daily newspaper: <a href="{{url_for('all_newsd_sub')}}">Click here!</a></p>
+
+    </div> <!-- end of container -->
 </body>
 </html>
