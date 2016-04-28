@@ -2,37 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {%include 'head_links.html'%}
     <title>Magazine Subscriptions</title>
 </head>
 <body>
-    <p>Welcome! All Magazine Subscriptions</p>
-    <table style="width: 100%">
-        <tr>
-			<th>Customer Name</th>
-			<th>Customer Address</th>
-            <th>Magazine Name</th>
-            <th>Magazine Frequency</th>
-            <th>Magazine distribution state</th>
-            <th>Magazine Rate</th>
-			<th>Number of Issues</th>
-            <th>Subscription End Date</th>
-			<th>Customer Subscription Status</th>
-			<th>Subscription Cost</th>
-        </tr>
-        {%for magazine in all_mag_sub%}
-        <tr>
-            <td>{{magazine[0]}}</td>
-            <td>{{magazine[1]}}</td>
-            <td>{{magazine[2]}}</td>
-			<td>{{magazine[3]}}</td>
-			<td>{{magazine[4]}}</td>
-			<td>${{magazine[5]|float }}</td>
-			<td>{{magazine[6]}}</td>
-			<td>{{magazine[7]}}</td>
-			<td>{{magazine[8]}}</td>
-            <td>${{magazine[9]|float }}</td>
-        </tr>
-        {%endfor%}
+    {% include 'navbar.html' %}
+    <div class="container">
+    <p style="margin-bottom: 20px">Welcome! All Magazine Subscriptions</p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Customer Address</th>
+                <th>Magazine Name</th>
+                <th>Magazine Frequency</th>
+                <th>Magazine distribution state</th>
+                <th>Magazine Rate</th>
+                <th>Number of Issues</th>
+                <th>Subscription End Date</th>
+                <th>Customer Subscription Status</th>
+                <th>Subscription Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for magazine in all_mag_sub%}
+            <tr>
+                <td>{{magazine[0]}}</td>
+                <td>{{magazine[1]}}</td>
+                <td>{{magazine[2]}}</td>
+                <td>{{magazine[3]}}</td>
+                <td>{{magazine[4]}}</td>
+                <td>${{magazine[5]|float }}</td>
+                <td>{{magazine[6]}}</td>
+                <td>{{magazine[7]}}</td>
+                <td>{{magazine[8]}}</td>
+                <td>${{magazine[9]|float }}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
     </table>
+    </div>
 </body>
 </html>

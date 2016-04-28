@@ -2,37 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {%include 'head_links.html'%}
     <title>Daily Newspaper Subscriptions</title>
 </head>
 <body>
-    <p>Welcome! All Daily Newspaper Subscriptions</p>
-    <table style="width: 100%">
-        <tr>
-			<th>Customer Name</th>
-			<th>Customer Address</th>
-            <th>Newspaper Name</th>
-            <th>Newspaper Type</th>
-            <th>Newspaper distribution state</th>
-            <th>Newspaper Rate</th>
-			<th>Number of Issues</th>
-            <th>Subscription End Date</th>
-			<th>Customer Subscription Status</th>
-			<th>Subscription Cost</th>
-        </tr>
-        {%for newsd in all_newsd_sub%}
-        <tr>
-            <td>{{newsd[0]}}</td>
-            <td>{{newsd[1]}}</td>
-            <td>{{newsd[2]}}</td>
-			<td>{{newsd[3]}}</td>
-			<td>{{newsd[4]}}</td>
-			<td>${{newsd[5]|float }}</td>
-			<td>{{newsd[6]}}</td>
-			<td>{{newsd[7]}}</td>
-			<td>{{newsd[8]}}</td>
-            <td>${{newsd[9]|float }}</td>
-        </tr>
-        {%endfor%}
+    {% include 'navbar.html' %}
+    <div class="container">
+    <p style="margin-bottom: 20px">Welcome! All Daily Newspaper Subscriptions</p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Customer Address</th>
+                <th>Newspaper Name</th>
+                <th>Newspaper Type</th>
+                <th>Newspaper distribution state</th>
+                <th>Newspaper Rate</th>
+                <th>Number of Issues</th>
+                <th>Subscription End Date</th>
+                <th>Customer Subscription Status</th>
+                <th>Subscription Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for newsd in all_newsd_sub%}
+            <tr>
+                <td>{{newsd[0]}}</td>
+                <td>{{newsd[1]}}</td>
+                <td>{{newsd[2]}}</td>
+                <td>{{newsd[3]}}</td>
+                <td>{{newsd[4]}}</td>
+                <td>${{newsd[5]|float }}</td>
+                <td>{{newsd[6]}}</td>
+                <td>{{newsd[7]}}</td>
+                <td>{{newsd[8]}}</td>
+                <td>${{newsd[9]|float }}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
     </table>
+    </div>
 </body>
 </html>
